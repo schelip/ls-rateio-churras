@@ -19,7 +19,7 @@ class TotalComponent extends Component<TotalStateProps> {
     return (
       <div className="total-component">
         <h3>Resultado do rateio</h3>
-        <p>Aqui voce vai tem o valor total do rateio por pessoa.</p>
+        <p>Aqui você pode ver o valor total do rateio por pessoa.</p>
 
         <Accordion>
           <Accordion.Item eventKey="0">
@@ -29,13 +29,17 @@ class TotalComponent extends Component<TotalStateProps> {
               <p>
                 Quem está
                 {' '}
-                <b>negativo deverá pagar</b>
+                <b>negativo</b>
                 {' '}
-                e quem está positivo, o valor total indica o valor total
-                que ele vai receber de volta.
+                deverá pagar a quantidade indicada pelo valor total, e quem está
+                {' '}
+                <b>positivo</b>
+                {' '}
+                deverá receber a quantidade indicada.
               </p>
               <p>
                 O cálculo do rateio é feito da seguinte forma:
+                {' '}
                 <b>(soma dos gastos / número de pessoas) - valor pago por pessoa</b>
                 .
               </p>
