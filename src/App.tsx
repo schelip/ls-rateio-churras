@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import TabComponent from './components/tabs.component';
 
 import store from './store';

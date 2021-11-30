@@ -1,5 +1,5 @@
-import { BaseModel } from "./base.model";
-import { Person } from "./person.model";
+import { BaseModel } from './base.model';
+import { Person } from './person.model';
 
 export class Summary extends BaseModel {
     peopleCount: number;
@@ -9,13 +9,13 @@ export class Summary extends BaseModel {
     expensesPerPerson: number;
 
     constructor(
-        peopleCount: number,
-        peopleReceiving: Person[],
-        expensesPerPerson: number
+      peopleCount: number,
+      peopleReceiving: Person[],
+      expensesPerPerson: number,
     ) {
-        super();
-        this.peopleCount = peopleCount;
-        this.peopleReceiving = peopleReceiving;
-        this.expensesPerPerson = expensesPerPerson;
+      super();
+      this.peopleCount = peopleCount;
+      this.peopleReceiving = peopleReceiving;
+      this.expensesPerPerson = expensesPerPerson;
     }
 }

@@ -14,11 +14,9 @@ export interface ApplicationState {
     summary: BaseStates<Summary>;
 }
 
-// const store: Store<ApplicationState> = createStore(rootReducer);
-
 const store: Store<ApplicationState> = createStore(
-    rootReducer,
-    composeWithDevTools()
+  rootReducer,
+  composeWithDevTools(),
 );
 
 export * as Actions from './ducks/base/base.actions';

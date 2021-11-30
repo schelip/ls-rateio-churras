@@ -1,22 +1,19 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
-    Button,
-    Form,
-    FormControl,
-    InputGroup,
-    Table,
-    Row,
-    Col,
-} from "react-bootstrap";
-import { BsTrash, BsPencil } from "react-icons/bs";
-import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
-import { Person } from "../models/person.model";
-import { Expense } from "../models/expense.model";
-import { Actions, ApplicationState } from "../store";
+  Button,
+  Form,
+  FormControl,
+  InputGroup,
+  Table,
+  Row,
+  Col,
+} from 'react-bootstrap';
+import { BsTrash, BsPencil } from 'react-icons/bs';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { Person } from '../models/person.model';
+import { Expense } from '../models/expense.model';
+import { Actions, ApplicationState } from '../store';
 
 interface StateProps {
     people: Person[];
@@ -36,127 +33,124 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps;
 
 class ExpenseComponent extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
+  constructor(props: Props) {
+    super(props);
 
-        this.state = {
-            value: 0,
-            personId: "",
-        };
+    this.state = {
+      value: 0,
+      personId: '',
+    };
 
-        this.updateValue = this.updateValue.bind(this);
-        this.updatePeople = this.updatePeople.bind(this);
+    this.updateValue = this.updateValue.bind(this);
+    this.updatePeople = this.updatePeople.bind(this);
+  }
+
+  componentDidMount() {
+    const { loadRequest } = this.props;
+
+    loadRequest();
+  }
+
+  handleDataRequest() {
+    const { people } = this.props;
+    const { personId, value } = this.state;
+
+    const person = people.find((p) => p.id === personId);
+
+    if (!person) {
+      throw Error();
     }
 
-    componentDidMount() {
-        const { loadRequest } = this.props;
+    const { expenses } = this.props;
+    return {
+      state: expenses,
+      data: new Expense(person, value),
+    };
+  }
 
-        loadRequest();
-    }
+  updateValue(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ value: Number(event.target.value) });
+  }
 
-    handleDataRequest() {
-        const { people } = this.props;
-        const { personId, value } = this.state;
+  updatePeople(event: React.ChangeEvent<HTMLSelectElement>) {
+    this.setState({ personId: event.target.value });
+  }
 
-        const person = people.find((p) => p.id === personId);
+  render() {
+    const { people, expenses, createExpenseRequest } = this.props;
+    return (
+      <div className="expense-component">
+        <h3>Cadastre um gasto</h3>
+        <p>
+          Aqui você vai cadastrar os valores que foram gastos no rolê
+          e quem pagou.
+        </p>
 
-        if (!person) {
-            console.log("erro pessoa null");
-            throw Error();
-        }
-
-        console.log("aqui", this.props);
-
-        return {
-            state: this.props.expenses,
-            data: new Expense(person, value),
-        };
-    }
-
-    updateValue(event: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({ value: Number(event.target.value) });
-    }
-
-    updatePeople(event: React.ChangeEvent<HTMLSelectElement>) {
-        this.setState({ personId: event.target.value });
-    }
-
-    render() {
-        const { people, expenses, createExpenseRequest } = this.props;
-        return (
-            <div className="expense-component">
-                <h3>Cadastre um gasto</h3>
-                <p>
-                    Aqui você vai cadastrar os valores que foram gastos no rolê
-                    e quem pagou.
-                </p>
-
-                <Row className="justify-content-md-center">
-                    <Col lg="2">
-                        <InputGroup className="mb-3">
-                            <InputGroup.Text>R$</InputGroup.Text>
-                            <FormControl
-                                aria-label="Dollar amount (with dot and two decimal places)"
-                                type="number"
-                                placeholder="Valor"
-                                onChange={this.updateValue}
-                            />
-                        </InputGroup>
-                    </Col>
-                    <Col lg="3">
-                        <Form.Select onChange={this.updatePeople}>
-                            <option value="null">Quem pagou</option>
-                            {people.map((person) => (
-                                <option key={person.id} value={person.id}>
-                                    {person.name}
-                                </option>
-                            ))}
-                        </Form.Select>
-                    </Col>
-                    <Col lg="1">
-                        <Button
-                            variant="outline-dark"
-                            onClick={() =>
-                                createExpenseRequest(this.handleDataRequest())
-                            }
-                        >
-                            Salvar
-                        </Button>{" "}
-                    </Col>
-                </Row>
-                <hr />
-                <Table striped bordered hover variant="dark">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Valor</th>
-                            <th />
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {expenses.map((expense) => (
-                            <tr key={expense.id}>
-                                <td>{expense.person.name}</td>
-                                <td>{expense.value}</td>
-                                <td>
-                                    <BsPencil />
-                                    <BsTrash />
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            </div>
-        );
-    }
+        <Row className="justify-content-md-center">
+          <Col lg="2">
+            <InputGroup className="mb-3">
+              <InputGroup.Text>R$</InputGroup.Text>
+              <FormControl
+                aria-label="Dollar amount (with dot and two decimal places)"
+                type="number"
+                placeholder="Valor"
+                onChange={this.updateValue}
+              />
+            </InputGroup>
+          </Col>
+          <Col lg="3">
+            <Form.Select onChange={this.updatePeople}>
+              <option value="null">Quem pagou</option>
+              {people.map((person) => (
+                <option key={person.id} value={person.id}>
+                  {person.name}
+                </option>
+              ))}
+            </Form.Select>
+          </Col>
+          <Col lg="1">
+            <Button
+              variant="outline-dark"
+              onClick={() => createExpenseRequest(this.handleDataRequest())}
+            >
+              Salvar
+            </Button>
+            {' '}
+          </Col>
+        </Row>
+        <hr />
+        <Table striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Valor</th>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {expenses.map((expense) => (
+              <tr key={expense.id}>
+                <td>{expense.person.name}</td>
+                <td>{expense.value}</td>
+                <td>
+                  <BsPencil />
+                  <BsTrash />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-    people: state.person.data,
-    expenses: state.expense.data,
+  people: state.person.data,
+  expenses: state.expense.data,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) =>
-    bindActionCreators(Actions, dispatch);
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators(Actions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExpenseComponent);

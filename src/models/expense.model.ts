@@ -1,6 +1,5 @@
-import { BaseModel } from "./base.model";
-import { Person } from "./person.model";
-
+import { BaseModel } from './base.model';
+import { Person } from './person.model';
 
 export class Expense extends BaseModel {
     person: Person;
@@ -8,8 +7,8 @@ export class Expense extends BaseModel {
     value: number;
 
     constructor(person: Person, value: number) {
-        super();
-        this.person=person;
-        this.value=value;
+      super();
+      this.person = person;
+      this.value = value;
     }
 }

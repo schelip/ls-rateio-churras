@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-case-declarations */
-import { Reducer } from "redux";
-import { Expense } from "../../../models/expense.model";
-import { BaseStates } from "../base/base.types";
-import { ExpenseTypes } from "./expense.types";
+import { Reducer } from 'redux';
+import { Expense } from '../../../models/expense.model';
+import { BaseStates } from '../base/base.types';
+import { ExpenseTypes } from './expense.types';
 
 const SPEND_INITIAL_STATE = {
   data: [],
@@ -13,26 +12,24 @@ const SPEND_INITIAL_STATE = {
 
 function expenseReduce(
   state: BaseStates<Expense> = SPEND_INITIAL_STATE,
-  action: any
+  action: any,
 ): any {
-  console.log(action.type, state, action);
-
+  const data = [...state.data];
   switch (action.type) {
     case ExpenseTypes.EXPENSE_CREATE:
-      const data = [...state.data];
       if (action.payload.data) {
         data.push(action.payload.data);
       }
 
-      console.log("state com push ->>>", action.payload.state);
-
-      return { ...state, data, loading: true, error: false };
+      return {
+        ...state, data, loading: true, error: false,
+      };
     default:
       return state;
   }
 }
 
-const expenseReducer: Reducer<BaseStates<Expense>> = (state, action) =>
-  expenseReduce(state, action);
+// eslint-disable-next-line max-len
+const expenseReducer: Reducer<BaseStates<Expense>> = (state, action) => expenseReduce(state, action);
 
 export { expenseReducer };

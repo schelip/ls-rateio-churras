@@ -1,25 +1,21 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { Component } from 'react';
 import { Accordion, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import  SummaryComponent from './summary.component';
+import SummaryComponent from './summary.component';
 import { Total } from '../models/total.model';
 import { Actions, ApplicationState } from '../store';
-
 
 interface TotalStateProps {
   total: Total[]
 }
 
-
-class TotalComponent extends Component<TotalStateProps>{
+class TotalComponent extends Component<TotalStateProps> {
   componentDidMount() { }
 
   render() {
-
-    const { total } = this.props
+    const { total } = this.props;
     return (
       <div className="total-component">
         <h3>Resultado do rateio</h3>
@@ -30,10 +26,18 @@ class TotalComponent extends Component<TotalStateProps>{
             <Accordion.Header>Entenda o resultado</Accordion.Header>
             <Accordion.Body>
 
-              <p>Quem está <b>negativo deverá pagar</b> e quem está positivo, o valor total indica o valor total que ele vai receber de volta.</p>
+              <p>
+                Quem está
+                {' '}
+                <b>negativo deverá pagar</b>
+                {' '}
+                e quem está positivo, o valor total indica o valor total
+                que ele vai receber de volta.
+              </p>
               <p>
                 O cálculo do rateio é feito da seguinte forma:
-                <b>(soma dos gastos / número de pessoas) - valor pago por pessoa</b>.
+                <b>(soma dos gastos / número de pessoas) - valor pago por pessoa</b>
+                .
               </p>
             </Accordion.Body>
           </Accordion.Item>
@@ -51,7 +55,7 @@ class TotalComponent extends Component<TotalStateProps>{
             </tr>
           </thead>
           <tbody>
-            {total.map(item => (
+            {total.map((item) => (
               <tr key={item.id}>
                 <td>{item.person.name}</td>
                 <td>{item.expenseValue}</td>
@@ -67,7 +71,7 @@ class TotalComponent extends Component<TotalStateProps>{
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  total: state.total.data
+  total: state.total.data,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators(Actions, dispatch);
