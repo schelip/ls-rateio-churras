@@ -1,0 +1,8 @@
+/* eslint-disable no-shadow */
+
+
+export enum PersonTypes {
+    PERSON_CREATE_SUCCESS = 'PERSON_CREATE_SUCCESS',
+    PERSON_CREATE_REQUEST = 'PERSON_CREATE_REQUEST',
+    PERSON_CREATE_FAILURE = 'PERSON_CREATE_FAILURE'
+}

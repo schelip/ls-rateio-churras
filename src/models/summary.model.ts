@@ -1,22 +1,21 @@
 import { BaseModel } from "./base.model";
-import { People } from "./people.model";
+import { Person } from "./person.model";
 
 export class Summary extends BaseModel {
-    countPeople : number;
+    peopleCount: number;
 
-    peopleRecive: People[];
+    peopleReceiving: Person[];
 
-    spendPerPerson: number;
-
+    expensesPerPerson: number;
 
     constructor(
-        countPeople: number, 
-        peopleRecive: People[],
-        spendPerPerson: number
+        peopleCount: number,
+        peopleReceiving: Person[],
+        expensesPerPerson: number
     ) {
         super();
-        this.countPeople = countPeople
-        this.peopleRecive = peopleRecive
-        this.spendPerPerson = spendPerPerson
+        this.peopleCount = peopleCount;
+        this.peopleReceiving = peopleReceiving;
+        this.expensesPerPerson = expensesPerPerson;
     }
 }

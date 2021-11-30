@@ -1,8 +1,9 @@
 import React from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
-import PeopleComponent from './people.component';
-import SpendComponent from './spend.component';
+import PersonComponent from './person.component';
+import ExpenseComponent from './expense.component';
 import TotalComponent from './total.component';
+
 
 function TabComponent(): JSX.Element{
     return (
@@ -11,10 +12,10 @@ function TabComponent(): JSX.Element{
             id="uncontrolled-tab-example"
             className="mb-4 mt-3">
             <Tab eventKey="people" title="Pessoas">
-                <PeopleComponent />
+                <PersonComponent />
             </Tab>
-            <Tab eventKey="spend" title="Gastos">
-                <SpendComponent />
+            <Tab eventKey="expenses" title="Gastos">
+                <ExpenseComponent />
             </Tab>
             <Tab eventKey="total" title="Total">
                 <TotalComponent />

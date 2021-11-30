@@ -3,9 +3,9 @@
 import { Reducer } from "redux";
 import { Total } from "../../../models/total.model";
 import { BaseStates } from "../base/base.types";
-import { SpendTypes } from "../spend/spend.types";
+import { ExpenseTypes } from "../expense/expense.types";
 import * as TotalService from '../../../services/total.service'
-import { PeopleTypes } from "../people/people.types";
+import { PersonTypes } from "../person/person.types";
 
 const TOTAL_INITIAL_STATE = {
     data: [],
@@ -17,15 +17,15 @@ function totalReduce(state: BaseStates<Total> = TOTAL_INITIAL_STATE, action: any
     console.log(action.type ,state, action);
     
     switch(action.type){
-        case PeopleTypes.PEOPLE_CREATE_REQUEST:
+        case PersonTypes.PERSON_CREATE_REQUEST:
             const totalPeople = [...state.data];
             TotalService.addNewPerson(totalPeople, action.payload.data)
             console.log('total do people --->', totalPeople);
             
             return {...state, data: totalPeople, loading: true, error: false};
-        case SpendTypes.SPEND_CREATE:
+        case ExpenseTypes.EXPENSE_CREATE:
             const totalSpend= [...state.data];
-            TotalService.addNewSpend(totalSpend, action.payload.data);
+            TotalService.addNewExpense(totalSpend, action.payload.data);
             console.log('total do spend --->',totalSpend);
             
             return {...state, data: totalSpend, loading: true, error: false};

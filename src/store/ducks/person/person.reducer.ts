@@ -1,38 +1,33 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-case-declarations */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Reducer } from "redux";
-import { Spend } from "../../../models/spend.model";
+import { Person } from "../../../models/person.model";
 import { BaseStates } from "../base/base.types";
-import { SpendTypes } from "./spend.types";
+import { PersonTypes } from "./person.types";
 
-
-const SPEND_INITIAL_STATE = {
+const INITIAL_STATE_PERSON = {
     data: [],
     loading:false,
     error: false
 };
 
-function spendReduce(state: BaseStates<Spend> = SPEND_INITIAL_STATE, action: any): any {
+function personReduce(state: BaseStates<Person> = INITIAL_STATE_PERSON, action: any): any {
     console.log(action.type ,state, action);
     
     switch(action.type){
-        
-        case SpendTypes.SPEND_CREATE:
+        case PersonTypes.PERSON_CREATE_REQUEST:
             const data = [...state.data];
             if(action.payload.data){
                 data.push(action.payload.data)
             }
-
-            console.log('state com push ->>>',action.payload.state);
-            
             return {...state, data, loading: true, error: false};
         default:
             return state;
     }
 }
 
-const spendReducer: Reducer<BaseStates<Spend>> = (state, action) => spendReduce(state, action);
+const personReducer: Reducer<BaseStates<Person>> = (state, action) => personReduce(state, action);
 
 export{
-    spendReducer,
+    personReducer,
 }

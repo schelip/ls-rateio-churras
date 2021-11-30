@@ -20,12 +20,12 @@ class SummaryComponent extends Component<SummaryStateProps>{
     const { summary } = this.props
     return (
       <div className="total-component">
-          <h4>Total de pessoas: {summary[0].countPeople}</h4>
-          <h4>Média de gastos: {summary[0].spendPerPerson}</h4>
+          <h4>Total de pessoas: {summary[0].peopleCount}</h4>
+          <h4>Média de gastos: {summary[0].expensesPerPerson}</h4>
 
           <ul>
-            {summary[0].peopleRecive.map(people => (
-                <li key={people.id}>{people.name}</li>
+            {summary[0].peopleReceiving.map(person => (
+                <li key={person.id}>{person.name}</li>
             ))}
         </ul>
       </div>

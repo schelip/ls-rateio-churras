@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { Component } from 'react';
-import { Accordion, Row, Table } from 'react-bootstrap';
-import { BsPencil, BsTrash } from 'react-icons/bs';
+import { Accordion, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import  SummaryComponent from './summary.component';
@@ -54,9 +53,9 @@ class TotalComponent extends Component<TotalStateProps>{
           <tbody>
             {total.map(item => (
               <tr key={item.id}>
-                <td>{item.people.name}</td>
-                <td>{item.spendValue}</td>
-                <td>{item.isRecive}</td>
+                <td>{item.person.name}</td>
+                <td>{item.expenseValue}</td>
+                <td>{item.isReceiving}</td>
                 <td>{item.totalValue}</td>
               </tr>
             ))}
