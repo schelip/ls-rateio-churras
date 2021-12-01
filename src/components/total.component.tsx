@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Accordion, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import SummaryComponent from './summary.component';
 import { Total } from '../models/total.model';
 import { Actions, ApplicationState } from '../store';
 
@@ -19,13 +18,11 @@ class TotalComponent extends Component<TotalStateProps> {
     return (
       <div className="total-component">
         <h3>Resultado do rateio</h3>
-        <p>Aqui você pode ver o valor total do rateio por pessoa.</p>
-
+        <p>Veja o valor total do rateio por pessoa.</p>
         <Accordion>
           <Accordion.Item eventKey="0">
             <Accordion.Header>Entenda o resultado</Accordion.Header>
             <Accordion.Body>
-
               <p>
                 Quem está
                 {' '}
@@ -47,7 +44,6 @@ class TotalComponent extends Component<TotalStateProps> {
           </Accordion.Item>
         </Accordion>
 
-        <SummaryComponent />
         <hr />
         <Table striped bordered hover variant="dark">
           <thead>

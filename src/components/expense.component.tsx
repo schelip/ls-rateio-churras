@@ -42,7 +42,7 @@ class ExpenseComponent extends Component<Props, State> {
     };
 
     this.updateValue = this.updateValue.bind(this);
-    this.updatePeople = this.updatePeople.bind(this);
+    this.updatePerson = this.updatePerson.bind(this);
   }
 
   componentDidMount() {
@@ -72,7 +72,7 @@ class ExpenseComponent extends Component<Props, State> {
     this.setState({ value: Number(event.target.value) });
   }
 
-  updatePeople(event: React.ChangeEvent<HTMLSelectElement>) {
+  updatePerson(event: React.ChangeEvent<HTMLSelectElement>) {
     this.setState({ personId: event.target.value });
   }
 
@@ -80,15 +80,15 @@ class ExpenseComponent extends Component<Props, State> {
     const { people, expenses, createExpenseRequest } = this.props;
     return (
       <div className="expense-component">
-        <h3>Cadastre um gasto</h3>
+        <h3>Gastos</h3>
         <p>
-          Aqui você vai cadastrar os valores que foram gastos no rolê
+          Cadastre os valores que foram gastos no rolê
           e quem pagou.
         </p>
 
         <Row className="justify-content-md-center">
-          <Col lg="2">
-            <InputGroup className="mb-3">
+          <Col lg="4">
+            <InputGroup>
               <InputGroup.Text>R$</InputGroup.Text>
               <FormControl
                 aria-label="Dollar amount (with dot and two decimal places)"
@@ -98,8 +98,8 @@ class ExpenseComponent extends Component<Props, State> {
               />
             </InputGroup>
           </Col>
-          <Col lg="3">
-            <Form.Select onChange={this.updatePeople}>
+          <Col lg="5">
+            <Form.Select onChange={this.updatePerson}>
               <option value="null">Quem pagou</option>
               {people.map((person) => (
                 <option key={person.id} value={person.id}>
@@ -115,10 +115,11 @@ class ExpenseComponent extends Component<Props, State> {
             >
               Salvar
             </Button>
-            {' '}
           </Col>
         </Row>
+
         <hr />
+
         <Table striped bordered hover variant="dark">
           <thead>
             <tr>

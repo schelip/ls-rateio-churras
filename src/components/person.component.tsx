@@ -56,15 +56,15 @@ class PersonComponent extends Component<Props, State> {
 
     return (
       <div className="person-component">
-        <h3>Cadastre uma pessoa</h3>
+        <h3>Participantes</h3>
         <p>
           {' '}
-          Aqui você vai cadastrar uma pessoa que vai participar da
+          Cadastre as pessoas que vão participar da
           divisão do churras.
         </p>
 
         <Row className="justify-content-md-center">
-          <Col lg="5">
+          <Col lg="8">
             <InputGroup>
               <InputGroup.Text id="inputGroup-sizing-lg">
                 Nome
@@ -90,7 +90,9 @@ class PersonComponent extends Component<Props, State> {
             {' '}
           </Col>
         </Row>
+
         <hr />
+
         <Table striped bordered hover variant="dark">
           <thead>
             <tr>
