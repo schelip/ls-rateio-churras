@@ -4,14 +4,14 @@ import { Expense } from '../../../models/expense.model';
 import { BaseStates } from '../base/base.types';
 import { ExpenseTypes } from './expense.types';
 
-const SPEND_INITIAL_STATE = {
+const EXPENSE_INITIAL_STATE = {
   data: [],
   loading: false,
   error: false,
 };
 
 function expenseReduce(
-  state: BaseStates<Expense> = SPEND_INITIAL_STATE,
+  state: BaseStates<Expense> = EXPENSE_INITIAL_STATE,
   action: any,
 ): any {
   const data = [...state.data];
