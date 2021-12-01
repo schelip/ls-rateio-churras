@@ -8,20 +8,21 @@ function updateSummaryPeople(summary: Summary): Summary {
 }
 
 function updateSummaryExpenses(summary: Summary, expenses: Expense[]): Summary {
+  const updatedSummary = summary;
   const expensesSum = expenses.reduce((a, s) => a + s.value, 0);
-  const expensesPerPerson = (expensesSum / summary.peopleCount) * -1;
-  const people = expenses.map((s) => s.person);
+  updatedSummary.expensesPerPerson = (expensesSum / summary.peopleCount);
 
-  const peopleReceiving = people.filter((p) => {
+  const people = expenses.map((s) => s.person);
+  updatedSummary.peopleReceiving = people.filter((p) => {
     const expense = expenses.find((s) => s.person.id === p.id);
     if (!expense) {
       return false;
     }
 
-    return expense.value > expensesPerPerson;
+    return expense.value > updatedSummary.expensesPerPerson;
   });
 
-  return { ...summary, expensesPerPerson, peopleReceiving };
+  return updatedSummary;
 }
 
 export { updateSummaryPeople, updateSummaryExpenses };

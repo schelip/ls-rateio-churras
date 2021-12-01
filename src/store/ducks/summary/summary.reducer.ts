@@ -20,20 +20,20 @@ const SUMMARY_INITIAL_STATE : BaseStates<Summary> = {
 };
 
 function summaryReduce(state: BaseStates<Summary> = SUMMARY_INITIAL_STATE, action: any): any {
-  const people = [...state.data];
-  const expenses = [...state.data];
+  const data = [...state.data];
   switch (action.type) {
     case PersonTypes.PERSON_CREATE_REQUEST:
-      SummaryService.updateSummaryPeople(people[0]);
+      SummaryService.updateSummaryPeople(data[0]);
 
       return {
-        ...state, data: people, loading: true, error: false,
+        ...state, data, loading: true, error: false,
       };
     case ExpenseTypes.EXPENSE_CREATE:
-      SummaryService.updateSummaryExpenses(expenses[0], action.payload.state);
+      SummaryService.updateSummaryExpenses(data[0],
+        action.payload.state.concat(action.payload.data));
 
       return {
-        ...state, data: expenses, loading: true, error: false,
+        ...state, data, loading: true, error: false,
       };
     default:
       return state;
@@ -43,6 +43,4 @@ function summaryReduce(state: BaseStates<Summary> = SUMMARY_INITIAL_STATE, actio
 // eslint-disable-next-line max-len
 const summaryReducer: Reducer<BaseStates<Summary>> = (state, action) => summaryReduce(state, action);
 
-export {
-  summaryReducer,
-};
+export { summaryReducer };
