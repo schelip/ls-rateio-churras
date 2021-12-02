@@ -29,8 +29,7 @@ function summaryReduce(state: BaseStates<Summary> = SUMMARY_INITIAL_STATE, actio
         ...state, data, loading: true, error: false,
       };
     case ExpenseTypes.EXPENSE_CREATE:
-      SummaryService.updateSummaryExpenses(data[0],
-        action.payload.state.concat(action.payload.data));
+      SummaryService.updateSummaryExpenses(data[0], action.payload.state);
 
       return {
         ...state, data, loading: true, error: false,

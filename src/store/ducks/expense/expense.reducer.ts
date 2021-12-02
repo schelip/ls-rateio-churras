@@ -13,16 +13,19 @@ const EXPENSE_INITIAL_STATE = {
 function expenseReduce(
   state: BaseStates<Expense> = EXPENSE_INITIAL_STATE,
   action: any,
-): any {
-  const data = [...state.data];
+): BaseStates<Expense> {
+  const { data } = state;
   switch (action.type) {
     case ExpenseTypes.EXPENSE_CREATE:
       if (action.payload.data) {
-        data.push(action.payload.data);
+        const newExpense = data.find((e) => e.person === action.payload.data.person);
+        if (newExpense) {
+          newExpense.value += action.payload.data.value;
+        } else data.push(action.payload.data);
       }
 
       return {
-        ...state, data, loading: true, error: false,
+        ...state, data: [...data], loading: true, error: false,
       };
     default:
       return state;
