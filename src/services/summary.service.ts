@@ -3,7 +3,11 @@ import { Summary } from '../models/summary.model';
 
 function updateSummaryPeople(summary: Summary): Summary {
   const updatedSummary = summary;
-  updatedSummary.peopleCount += 1;
+  if (summary.expensesPerPerson > 0) {
+    updatedSummary.expensesPerPerson = (summary.expensesPerPerson * summary.peopleCount)
+    / (summary.peopleCount + 1);
+  }
+  updatedSummary.peopleCount = summary.peopleCount + 1;
   return updatedSummary;
 }
 
