@@ -1,34 +1,32 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-plusplus */
-import { People } from "../models/people.model";
-import { Spend } from "../models/spend.model";
-import { Summary } from "../models/summary.model";
+import { Expense } from '../models/expense.model';
+import { Summary } from '../models/summary.model';
 
-function updateSummaryPeople(summary: Summary) {
-    summary.countPeople++;
-    return summary;
+function updateSummaryPeople(summary: Summary): Summary {
+  const updatedSummary = summary;
+  if (summary.expensesPerPerson > 0) {
+    updatedSummary.expensesPerPerson = (summary.expensesPerPerson * summary.peopleCount)
+    / (summary.peopleCount + 1);
+  }
+  updatedSummary.peopleCount = summary.peopleCount + 1;
+  return updatedSummary;
 }
 
-function updateSummarySpend(summary: Summary, spends: Spend[]):Summary  {
-    console.log('summary -------> ', summary, spends)
-    const sumSpend = spends.reduce((a, s) => a + s.value, 0);
-    const spendPerPerson = (sumSpend / summary.countPeople) * -1;
-    const people = spends.map(s => s.people);
+function updateSummaryExpenses(summary: Summary, expenses: Expense[]): Summary {
+  const updatedSummary = summary;
+  const expensesSum = expenses.reduce((a, s) => a + s.value, 0);
+  updatedSummary.expensesPerPerson = (expensesSum / summary.peopleCount);
 
-    const peopleRecive = people.filter(
-        p => {
-            const spend = spends.find(s => s.people.id === p.id)
-            if (!spend) {
-                return false;
-            }
+  const people = expenses.map((s) => s.person);
+  updatedSummary.peopleReceiving = people.filter((p) => {
+    const expense = expenses.find((s) => s.person.id === p.id);
+    if (!expense) {
+      return false;
+    }
 
-            return spend.value > spendPerPerson;
-        })
+    return expense.value > updatedSummary.expensesPerPerson;
+  });
 
-    return {...summary, spendPerPerson, peopleRecive};
+  return updatedSummary;
 }
 
-export{
-    updateSummaryPeople,
-    updateSummarySpend
-}
+export { updateSummaryPeople, updateSummaryExpenses };

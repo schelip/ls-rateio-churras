@@ -1,31 +1,31 @@
 /* eslint-disable no-shadow */
-import { BaseModel } from "./base.model";
-import { People } from "./people.model";
+import { BaseModel } from './base.model';
+import { Person } from './person.model';
 
-export enum ReciveEnum{
+export enum ReceivingEnum {
     yes = 'A receber',
     no = 'A restituir',
-    equal = 'Nada a fazer'
+    equal = 'Nada a fazer',
 }
 export class Total extends BaseModel {
-    people: People;
+    person: Person;
 
-    spendValue: number;
+    expenseValue: number;
 
     totalValue: number;
 
-    isRecive: ReciveEnum;
+    isReceiving: ReceivingEnum;
 
     constructor(
-        people:People, 
-        spendValue: number, 
-        totalValue: number, 
-        isRecive: ReciveEnum,
-        ) {
-        super();
-        this.people = people;
-        this.spendValue = spendValue;
-        this.totalValue = totalValue;
-        this.isRecive = isRecive;
+      person: Person,
+      expenseValue: number,
+      totalValue: number,
+      isReceiving: ReceivingEnum,
+    ) {
+      super();
+      this.person = person;
+      this.expenseValue = expenseValue;
+      this.totalValue = totalValue;
+      this.isReceiving = isReceiving;
     }
 }

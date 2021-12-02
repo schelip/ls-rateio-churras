@@ -1,55 +1,41 @@
-/* eslint-disable array-callback-return */
 /* eslint-disable no-param-reassign */
 
-import { People } from "../models/people.model";
-import { Spend } from "../models/spend.model";
-import { Total, ReciveEnum} from "../models/total.model";
+import { Person } from '../models/person.model';
+import { Expense } from '../models/expense.model';
+import { Total, ReceivingEnum } from '../models/total.model';
 
-function addNewPerson(totalState: Total[], person: People): Total[] {
-    totalState.push(
-        new Total(
-            person,
-            0,
-            0,
-            ReciveEnum.no
-        )
-    )
+function calcTotalSpend(totalState: Total[]) {
+  const expensesSum = totalState.reduce((a, t) => a + t.expenseValue, 0);
+  const expensesPerPerson = (expensesSum / totalState.length) * -1;
 
-    return calcTotalSpend(totalState)
-}
-
-function addNewSpend(totalState: Total[], spend: Spend) :Total[] {
-    const total = totalState.find(t => t.people.id === spend.people.id)
-
-    if (!total) {
-        return totalState;
+  return totalState.map((item) => {
+    const total = expensesPerPerson + item.expenseValue;
+    item.totalValue = total;
+    if (total === 0) {
+      item.isReceiving = ReceivingEnum.equal;
+    } else {
+      item.isReceiving = total > 0 ? ReceivingEnum.yes : ReceivingEnum.no;
     }
-
-    total.spendValue += spend.value;
-
-    return calcTotalSpend(totalState);
+    return item;
+  });
 }
 
-function calcTotalSpend(totalState: Total[]){
-    const sumSpend = totalState.reduce((a, t) => a + t.spendValue, 0);
-    const spendPerPerson = (sumSpend / totalState.length) * -1;
-    
-    return totalState.map((item) => {
-        const total = spendPerPerson + item.spendValue;
-        item.totalValue = total;
-        if( total === 0){
-            item.isRecive = ReciveEnum.equal;
-        }
-        else {
-            item.isRecive = total > 0 
-            ? ReciveEnum.yes
-            : ReciveEnum.no;
-        }
-        return item;
-    })
+function addNewPerson(totalState: Total[], person: Person): Total[] {
+  totalState.push(new Total(person, 0, 0, ReceivingEnum.no));
+
+  return calcTotalSpend(totalState);
 }
 
-export {
-    addNewPerson,
-    addNewSpend
+function addNewExpense(totalState: Total[], expense: Expense): Total[] {
+  const total = totalState.find((t) => t.person.id === expense.person.id);
+
+  if (!total) {
+    return totalState;
+  }
+
+  total.expenseValue += expense.value;
+
+  return calcTotalSpend(totalState);
 }
+
+export { addNewPerson, addNewExpense };
