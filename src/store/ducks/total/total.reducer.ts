@@ -13,26 +13,32 @@ const TOTAL_INITIAL_STATE = {
 };
 
 function totalReduce(state: BaseStates<Total> = TOTAL_INITIAL_STATE, action: any): any {
-  const people = [...state.data];
-  const expenses = [...state.data];
+  const data = [...state.data];
   switch (action.type) {
     case PersonTypes.PERSON_CREATE_REQUEST:
-      TotalService.addNewPerson(people, action.payload.data);
+      TotalService.addTotalPerson(data, action.payload.data);
 
       return {
-        ...state, data: people, loading: true, error: false,
+        ...state, data, loading: true, error: false,
       };
     case PersonTypes.PERSON_EDIT_REQUEST:
-      TotalService.updatePerson(people, action.payload.data);
+      TotalService.editTotalPerson(data, action.payload.data);
 
       return {
-        ...state, data: people, loading: true, error: false,
+        ...state, data, loading: true, error: false,
       };
-    case ExpenseTypes.EXPENSE_CREATE:
-      TotalService.addNewExpense(expenses, action.payload.data);
+    case PersonTypes.PERSON_REMOVE_REQUEST:
+      TotalService.removeTotalPerson(data, action.payload.data);
 
       return {
-        ...state, data: expenses, loading: true, error: false,
+        ...state, data, loading: true, error: false,
+      };
+
+    case ExpenseTypes.EXPENSE_CREATE_REQUEST:
+      TotalService.addNewExpense(data, action.payload.data);
+
+      return {
+        ...state, data, loading: true, error: false,
       };
     default:
       return state;

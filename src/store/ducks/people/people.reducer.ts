@@ -29,6 +29,17 @@ function peopleReduce(state: BaseStates<Person> = INITIAL_STATE_PEOPLE, action: 
       return {
         ...state, data: [...data], loading: true, error: false,
       };
+
+    case PersonTypes.PERSON_REMOVE_REQUEST:
+      if (action.payload.data) {
+        const index = data.indexOf(action.payload.data, 0);
+        if (index > -1) data.splice(index, 1);
+      }
+
+      return {
+        ...state, data: [...data], loading: true, error: false,
+      };
+
     default:
       return state;
   }

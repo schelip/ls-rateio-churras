@@ -2,32 +2,45 @@ import { Expense } from '../models/expense.model';
 import { Person } from '../models/person.model';
 import { Summary } from '../models/summary.model';
 
-function updateSummaryPeople(summary: Summary, people: Person[]): Summary {
-  const updatedSummary = summary;
-  updatedSummary.peopleCount = people.length;
-  updatedSummary.peopleReceiving.map((person) => {
-    const updatedPerson = people.find((p) => p.id === person.id);
-    if (updatedPerson) return updatedPerson; return person;
-  });
-  return updatedSummary;
+function addSummaryPerson(summary: Summary): Summary {
+  const peopleCount = summary.peopleCount + 1;
+  const expensesPerPerson = summary.expensesTotal / peopleCount;
+  return { ...summary, peopleCount, expensesPerPerson };
+}
+
+function editSummaryPerson(summary: Summary, person: Person): Summary {
+  const { peopleReceiving } = summary;
+  peopleReceiving.map((p) => (p.id === person.id ? person : p));
+  return { ...summary, peopleReceiving };
+}
+
+function removeSummaryPerson(summary: Summary, person: Person): Summary {
+  const { peopleReceiving } = summary;
+  const index = peopleReceiving.findIndex((p) => p.id === person.id);
+  if (index > -1) {
+    peopleReceiving.splice(index, 1);
+  }
+  return { ...summary, peopleCount: summary.peopleCount - 1, peopleReceiving };
 }
 
 function updateSummaryExpenses(summary: Summary, expenses: Expense[]): Summary {
-  const updatedSummary = summary;
-  const expensesSum = expenses.reduce((a, s) => a + s.value, 0);
-  updatedSummary.expensesPerPerson = (expensesSum / summary.peopleCount);
+  const expensesTotal = expenses.reduce((a, s) => a + s.value, 0);
+  const expensesPerPerson = summary.peopleCount !== 0 ? (expensesTotal / summary.peopleCount) : 0;
 
-  const people = expenses.map((s) => s.person);
-  updatedSummary.peopleReceiving = people.filter((p) => {
+  const peopleReceiving = expenses.map((s) => s.person).filter((p) => {
     const expense = expenses.find((s) => s.person.id === p.id);
     if (!expense) {
       return false;
     }
 
-    return expense.value > updatedSummary.expensesPerPerson;
+    return expense.value > expensesPerPerson;
   });
 
-  return updatedSummary;
+  return {
+    ...summary, expensesTotal, expensesPerPerson, peopleReceiving,
+  };
 }
 
-export { updateSummaryPeople, updateSummaryExpenses };
+export {
+  addSummaryPerson, editSummaryPerson, removeSummaryPerson, updateSummaryExpenses,
+};

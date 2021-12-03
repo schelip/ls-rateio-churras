@@ -20,16 +20,24 @@ function calcTotalExpenses(totalState: Total[]) {
   });
 }
 
-function addNewPerson(totalState: Total[], person: Person): Total[] {
+function addTotalPerson(totalState: Total[], person: Person): Total[] {
   totalState.push(new Total(person, 0, 0, ReceivingEnum.no));
-
   return calcTotalExpenses(totalState);
 }
 
-function updatePerson(totalState: Total[], person: Person): Total[] {
+function editTotalPerson(totalState: Total[], person: Person): Total[] {
   const existingTotal = totalState.find((t) => t.person.id === person.id);
   if (existingTotal) existingTotal.person = person;
-  return [...totalState];
+  return calcTotalExpenses(totalState);
+}
+
+function removeTotalPerson(totalState: Total[], person: Person): Total[] {
+  const index = totalState.findIndex((t) => t.person.id === person.id, 0);
+  if (index > -1) {
+    totalState.splice(index, 1);
+  }
+
+  return calcTotalExpenses(totalState);
 }
 
 function addNewExpense(totalState: Total[], expense: Expense): Total[] {
@@ -44,4 +52,6 @@ function addNewExpense(totalState: Total[], expense: Expense): Total[] {
   return calcTotalExpenses(totalState);
 }
 
-export { addNewPerson, updatePerson, addNewExpense };
+export {
+  addTotalPerson, editTotalPerson, removeTotalPerson, addNewExpense,
+};

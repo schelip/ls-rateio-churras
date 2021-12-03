@@ -12,6 +12,7 @@ const SUMMARY_INITIAL_STATE : BaseStates<Summary> = {
       id: 'b4fcb9db-0158-44d8-bbb2-2b4c8c5cf3bd',
       peopleCount: 0,
       peopleReceiving: [],
+      expensesTotal: 0,
       expensesPerPerson: 0,
     },
   ],
@@ -23,18 +24,34 @@ function summaryReduce(state: BaseStates<Summary> = SUMMARY_INITIAL_STATE, actio
   const data = [...state.data];
   switch (action.type) {
     case PersonTypes.PERSON_CREATE_REQUEST:
-    case PersonTypes.PERSON_EDIT_REQUEST:
-      data[0] = SummaryService.updateSummaryPeople(data[0], action.payload.state);
+      data[0] = SummaryService.addSummaryPerson(data[0]);
 
       return {
         ...state, data, loading: true, error: false,
       };
-    case ExpenseTypes.EXPENSE_CREATE:
+
+    case PersonTypes.PERSON_EDIT_REQUEST:
+      data[0] = SummaryService.editSummaryPerson(data[0], action.payload.data);
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
+    case PersonTypes.PERSON_REMOVE_REQUEST:
+      data[0] = SummaryService.removeSummaryPerson(data[0], action.payload.data);
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
+    case ExpenseTypes.EXPENSE_CREATE_REQUEST:
+    case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
       data[0] = SummaryService.updateSummaryExpenses(data[0], action.payload.state);
 
       return {
         ...state, data, loading: true, error: false,
       };
+
     default:
       return state;
   }

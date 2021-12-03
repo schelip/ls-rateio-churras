@@ -15,9 +15,11 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Person } from '../models/person.model';
 import '../assets/style/people.css';
 import { ApplicationState, Actions } from '../store';
+import { Expense } from '../models/expense.model';
 
 interface StateProps {
   people: Person[];
+  expenses: Expense[];
 }
 
 interface State {
@@ -29,7 +31,9 @@ interface State {
 interface DispatchProps {
   createPersonRequest(data: { state: Person[]; data: Person }): void;
   editPersonRequest(data: { state: Person[]; data: Person }): void;
-    loadRequest(): void;
+  removePersonRequest(data: { state: Person[]; data: Person }): void;
+  removeExpenseRequest(data: { state: Expense[]; data: Expense }): void;
+  loadRequest(): void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -68,7 +72,14 @@ class PeopleComponent extends Component<Props, State> {
   }
 
   render() {
-    const { people, createPersonRequest, editPersonRequest } = this.props;
+    const {
+      people,
+      expenses,
+      createPersonRequest,
+      editPersonRequest,
+      removePersonRequest,
+      removeExpenseRequest,
+    } = this.props;
     const { name, editingPerson, editingName } = this.state;
 
     return (
@@ -157,7 +168,22 @@ class PeopleComponent extends Component<Props, State> {
                         <Button variant="light" onClick={() => this.updateEditingPerson(person)}>
                           <BsPencil />
                         </Button>
-                        <Button variant="light">
+                        <Button
+                          variant="light"
+                          onClick={() => {
+                            removePersonRequest({
+                              state: people,
+                              data: person,
+                            });
+                            const expense = expenses.find((e) => e.person === person);
+                            if (expense) {
+                              removeExpenseRequest({
+                                state: expenses,
+                                data: expense,
+                              });
+                            }
+                          }}
+                        >
                           <BsTrash />
                         </Button>
                       </td>
@@ -174,6 +200,7 @@ class PeopleComponent extends Component<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   people: state.people.data,
+  expenses: state.expense.data,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators(Actions, dispatch);

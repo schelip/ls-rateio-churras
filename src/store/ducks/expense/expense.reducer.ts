@@ -16,7 +16,7 @@ function expenseReduce(
 ): BaseStates<Expense> {
   const { data } = state;
   switch (action.type) {
-    case ExpenseTypes.EXPENSE_CREATE:
+    case ExpenseTypes.EXPENSE_CREATE_REQUEST:
       if (action.payload.data) {
         const newExpense = data.find((e) => e.person === action.payload.data.person);
         if (newExpense) {
@@ -27,6 +27,19 @@ function expenseReduce(
       return {
         ...state, data: [...data], loading: true, error: false,
       };
+
+    case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
+      if (action.payload.data) {
+        const index = data.indexOf(action.payload.data, 0);
+        if (index > -1) {
+          data.splice(index, 1);
+        }
+      }
+
+      return {
+        ...state, data: [...data], loading: true, error: false,
+      };
+
     default:
       return state;
   }

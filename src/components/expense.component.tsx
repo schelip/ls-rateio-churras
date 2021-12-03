@@ -16,18 +16,19 @@ import { Expense } from '../models/expense.model';
 import { Actions, ApplicationState } from '../store';
 
 interface StateProps {
-    people: Person[];
-    expenses: Expense[];
+  people: Person[];
+  expenses: Expense[];
 }
 
 interface State {
-    value: number;
-    personId: string;
+  value: number;
+  personId: string;
 }
 
 interface DispatchProps {
-    createExpenseRequest(data: { state: Expense[], data: Expense }): void;
-    loadRequest(): void;
+  createExpenseRequest(data: { state: Expense[], data: Expense }): void;
+  removeExpenseRequest(data: { state: Expense[], data: Expense }): void;
+  loadRequest(): void;
 }
 
 type Props = StateProps & DispatchProps;
