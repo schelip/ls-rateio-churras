@@ -8,7 +8,7 @@ import { BaseStates } from './ducks/base/base.types';
 import rootReducer from './ducks/rootReducer';
 
 export interface ApplicationState {
-    person: BaseStates<Person>;
+    people: BaseStates<Person>;
     expense: BaseStates<Expense>;
     total: BaseStates<Total>;
     summary: BaseStates<Summary>;

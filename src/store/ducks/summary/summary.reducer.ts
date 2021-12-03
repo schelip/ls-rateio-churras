@@ -4,7 +4,7 @@ import { Summary } from '../../../models/summary.model';
 import { BaseStates } from '../base/base.types';
 import { ExpenseTypes } from '../expense/expense.types';
 import * as SummaryService from '../../../services/summary.service';
-import { PersonTypes } from '../person/person.types';
+import { PersonTypes } from '../people/people.types';
 
 const SUMMARY_INITIAL_STATE : BaseStates<Summary> = {
   data: [
@@ -23,7 +23,8 @@ function summaryReduce(state: BaseStates<Summary> = SUMMARY_INITIAL_STATE, actio
   const data = [...state.data];
   switch (action.type) {
     case PersonTypes.PERSON_CREATE_REQUEST:
-      data[0] = SummaryService.updateSummaryPeople(data[0]);
+    case PersonTypes.PERSON_EDIT_REQUEST:
+      data[0] = SummaryService.updateSummaryPeople(data[0], action.payload.state);
 
       return {
         ...state, data, loading: true, error: false,

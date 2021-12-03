@@ -1,13 +1,14 @@
 import { Expense } from '../models/expense.model';
+import { Person } from '../models/person.model';
 import { Summary } from '../models/summary.model';
 
-function updateSummaryPeople(summary: Summary): Summary {
+function updateSummaryPeople(summary: Summary, people: Person[]): Summary {
   const updatedSummary = summary;
-  if (summary.expensesPerPerson > 0) {
-    updatedSummary.expensesPerPerson = (summary.expensesPerPerson * summary.peopleCount)
-    / (summary.peopleCount + 1);
-  }
-  updatedSummary.peopleCount = summary.peopleCount + 1;
+  updatedSummary.peopleCount = people.length;
+  updatedSummary.peopleReceiving.map((person) => {
+    const updatedPerson = people.find((p) => p.id === person.id);
+    if (updatedPerson) return updatedPerson; return person;
+  });
   return updatedSummary;
 }
 

@@ -4,7 +4,7 @@ import { Total } from '../../../models/total.model';
 import { BaseStates } from '../base/base.types';
 import { ExpenseTypes } from '../expense/expense.types';
 import * as TotalService from '../../../services/total.service';
-import { PersonTypes } from '../person/person.types';
+import { PersonTypes } from '../people/people.types';
 
 const TOTAL_INITIAL_STATE = {
   data: [],
@@ -18,6 +18,12 @@ function totalReduce(state: BaseStates<Total> = TOTAL_INITIAL_STATE, action: any
   switch (action.type) {
     case PersonTypes.PERSON_CREATE_REQUEST:
       TotalService.addNewPerson(people, action.payload.data);
+
+      return {
+        ...state, data: people, loading: true, error: false,
+      };
+    case PersonTypes.PERSON_EDIT_REQUEST:
+      TotalService.updatePerson(people, action.payload.data);
 
       return {
         ...state, data: people, loading: true, error: false,

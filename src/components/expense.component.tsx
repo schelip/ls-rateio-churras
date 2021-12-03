@@ -148,7 +148,7 @@ class ExpenseComponent extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  people: state.person.data,
+  people: state.people.data,
   expenses: state.expense.data,
 });
 
