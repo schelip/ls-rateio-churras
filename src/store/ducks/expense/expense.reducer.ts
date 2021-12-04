@@ -14,18 +14,18 @@ function expenseReduce(
   state: BaseStates<Expense> = EXPENSE_INITIAL_STATE,
   action: any,
 ): BaseStates<Expense> {
-  const { data } = state;
+  const data = [...state.data];
   switch (action.type) {
     case ExpenseTypes.EXPENSE_CREATE_REQUEST:
       if (action.payload.data) {
         const existingExpense = data.find((e) => e.person === action.payload.data.person);
         if (existingExpense) {
-          existingExpense.value += action.payload.data.value;
+          existingExpense.value = action.payload.data.value;
         } else data.push(action.payload.data);
       }
 
       return {
-        ...state, data: [...data], loading: true, error: false,
+        ...state, data, loading: true, error: false,
       };
 
     case ExpenseTypes.EXPENSE_EDIT_REQUEST:
@@ -37,7 +37,7 @@ function expenseReduce(
       }
 
       return {
-        ...state, data: [...data], loading: true, error: false,
+        ...state, data, loading: true, error: false,
       };
 
     case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
@@ -49,7 +49,7 @@ function expenseReduce(
       }
 
       return {
-        ...state, data: [...data], loading: true, error: false,
+        ...state, data, loading: true, error: false,
       };
 
     default:

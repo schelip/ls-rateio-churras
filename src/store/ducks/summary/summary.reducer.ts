@@ -2,9 +2,8 @@
 import { Reducer } from 'redux';
 import { Summary } from '../../../models/summary.model';
 import { BaseStates } from '../base/base.types';
-import { ExpenseTypes } from '../expense/expense.types';
 import * as SummaryService from '../../../services/summary.service';
-import { PersonTypes } from '../people/people.types';
+import { SummaryTypes } from './summary.types';
 
 const SUMMARY_INITIAL_STATE : BaseStates<Summary> = {
   data: [
@@ -23,31 +22,10 @@ const SUMMARY_INITIAL_STATE : BaseStates<Summary> = {
 function summaryReduce(state: BaseStates<Summary> = SUMMARY_INITIAL_STATE, action: any): any {
   const data = [...state.data];
   switch (action.type) {
-    case PersonTypes.PERSON_CREATE_REQUEST:
-      data[0] = SummaryService.addSummaryPerson(data[0]);
-
-      return {
-        ...state, data, loading: true, error: false,
-      };
-
-    case PersonTypes.PERSON_EDIT_REQUEST:
-      data[0] = SummaryService.editSummaryPerson(data[0], action.payload.data);
-
-      return {
-        ...state, data, loading: true, error: false,
-      };
-
-    case PersonTypes.PERSON_REMOVE_REQUEST:
-      data[0] = SummaryService.removeSummaryPerson(data[0], action.payload.data);
-
-      return {
-        ...state, data, loading: true, error: false,
-      };
-
-    case ExpenseTypes.EXPENSE_CREATE_REQUEST:
-    case ExpenseTypes.EXPENSE_EDIT_REQUEST:
-    case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
-      data[0] = SummaryService.updateSummaryExpenses(data[0], action.payload.state);
+    case SummaryTypes.SUMMARY_UPDATE_REQUEST:
+      data[0] = SummaryService.updateSummary(
+        data[0], action.payload.people.data, action.payload.expenses.data,
+      );
 
       return {
         ...state, data, loading: true, error: false,

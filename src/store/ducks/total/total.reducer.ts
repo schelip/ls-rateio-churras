@@ -16,9 +16,21 @@ function totalReduce(state: BaseStates<Total> = TOTAL_INITIAL_STATE, action: any
   const data = [...state.data];
   switch (action.type) {
     case PersonTypes.PERSON_CREATE_REQUEST:
+      TotalService.addTotalPerson(data, action.payload.data);
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
     case PersonTypes.PERSON_EDIT_REQUEST:
+      TotalService.updateTotalPerson(data);
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
     case PersonTypes.PERSON_REMOVE_REQUEST:
-      TotalService.updateTotalPeople(data, action.payload.state);
+      TotalService.removeTotalPerson(data, action.payload.data);
 
       return {
         ...state, data, loading: true, error: false,
@@ -27,7 +39,7 @@ function totalReduce(state: BaseStates<Total> = TOTAL_INITIAL_STATE, action: any
     case ExpenseTypes.EXPENSE_CREATE_REQUEST:
     case ExpenseTypes.EXPENSE_EDIT_REQUEST:
     case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
-      TotalService.updateTotalExpenses(data, action.payload.state);
+      TotalService.updateTotalExpense(data, action.payload.data);
 
       return {
         ...state, data, loading: true, error: false,

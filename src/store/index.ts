@@ -1,5 +1,6 @@
-import { createStore, Store } from 'redux';
+import { applyMiddleware, createStore, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import thunkMiddleware from 'redux-thunk';
 import { Person } from '../models/person.model';
 import { Expense } from '../models/expense.model';
 import { Summary } from '../models/summary.model';
@@ -16,7 +17,7 @@ export interface ApplicationState {
 
 const store: Store<ApplicationState> = createStore(
   rootReducer,
-  composeWithDevTools(),
+  composeWithDevTools(applyMiddleware(thunkMiddleware)),
 );
 
 export * as Actions from './ducks/base/base.actions';
