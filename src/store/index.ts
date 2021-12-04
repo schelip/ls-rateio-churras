@@ -9,7 +9,7 @@ import rootReducer from './ducks/rootReducer';
 
 export interface ApplicationState {
     people: BaseStates<Person>;
-    expense: BaseStates<Expense>;
+    expenses: BaseStates<Expense>;
     total: BaseStates<Total>;
     summary: BaseStates<Summary>;
 }

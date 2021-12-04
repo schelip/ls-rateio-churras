@@ -6,7 +6,7 @@ import { summaryReducer } from './summary/summary.reducer';
 
 export default combineReducers({
   people: peopleReducer,
-  expense: expenseReducer,
+  expenses: expenseReducer,
   total: totalReducer,
   summary: summaryReducer,
 });

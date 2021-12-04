@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 import PeopleComponent from './people.component';
-import ExpenseComponent from './expense.component';
+import ExpensesComponent from './expenses.component';
 import TotalComponent from './total.component';
 
 function TabComponent(): JSX.Element {
@@ -15,7 +15,7 @@ function TabComponent(): JSX.Element {
         <PeopleComponent />
       </Tab>
       <Tab eventKey="expenses" title="Gastos">
-        <ExpenseComponent />
+        <ExpensesComponent />
       </Tab>
       <Tab eventKey="total" title="Total">
         <TotalComponent />
