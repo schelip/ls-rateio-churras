@@ -108,11 +108,14 @@ class ExpensesTableComponent extends Component<Props, State> {
                     <td>
                       <Form.Select onChange={this.updateEditingPersonId}>
                         <option value="null">Nova pessoa</option>
-                        {people.map((person) => (
-                          <option key={person.id} value={person.id}>
-                            {person.name}
-                          </option>
-                        ))}
+                        {people
+                          .filter((p) => !expenses.some((e) => e.person.id === p.id)
+                            || expense.person.id === p.id)
+                          .map((person) => (
+                            <option key={person.id} value={person.id}>
+                              {person.name}
+                            </option>
+                          ))}
                       </Form.Select>
                     </td>
                     <td>

@@ -2,7 +2,8 @@
 import { Reducer } from 'redux';
 import { Expense } from '../../../models/expense.model';
 import { BaseStates } from '../base/base.types';
-import { ExpenseTypes } from './expense.types';
+import { PersonTypes } from '../people/people.types';
+import { ExpenseTypes } from './expenses.types';
 
 const EXPENSE_INITIAL_STATE = {
   data: [],
@@ -30,10 +31,8 @@ function expenseReduce(
 
     case ExpenseTypes.EXPENSE_EDIT_REQUEST:
       if (action.payload.data) {
-        if (action.payload.data) {
-          const index = data.findIndex((e) => e.id === action.payload.data.id);
-          if (index > -1) Object.assign(data[index], action.payload.data);
-        }
+        const index = data.findIndex((e) => e.id === action.payload.data.id);
+        if (index > -1) data[index] = { ...action.payload.data };
       }
 
       return {
@@ -41,6 +40,18 @@ function expenseReduce(
       };
 
     case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
+      if (action.payload.data) {
+        const index = data.indexOf(action.payload.data, 0);
+        if (index > -1) {
+          data.splice(index, 1);
+        }
+      }
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
+    case PersonTypes.PERSON_REMOVE_REQUEST:
       if (action.payload.data) {
         const index = data.indexOf(action.payload.data, 0);
         if (index > -1) {

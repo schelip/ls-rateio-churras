@@ -24,7 +24,7 @@ function peopleReduce(state: BaseStates<Person> = INITIAL_STATE_PEOPLE, action: 
     case PersonTypes.PERSON_EDIT_REQUEST:
       if (action.payload.data) {
         const index = data.findIndex((p) => p.id === action.payload.data.id);
-        if (index > -1) Object.assign(data[index], action.payload.data);
+        if (index > -1) data[index] = { ...action.payload.data };
       }
       return {
         ...state, data, loading: true, error: false,

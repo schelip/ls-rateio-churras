@@ -25,7 +25,9 @@ function addTotalPerson(totalState: Total[], person: Person): Total[] {
   return calcTotalExpenses(totalState);
 }
 
-function updateTotalPerson(totalState: Total[]): Total[] {
+function updateTotalPerson(totalState: Total[], person: Person): Total[] {
+  const total = totalState.find((t) => t.person.id === person.id);
+  if (total) total.person = person;
   return calcTotalExpenses(totalState);
 }
 
@@ -37,12 +39,36 @@ function removeTotalPerson(totalState: Total[], person: Person): Total[] {
   return calcTotalExpenses(totalState);
 }
 
-function updateTotalExpense(totalState: Total[], expense: Expense): Total[] {
+function addTotalExpense(totalState: Total[], expense: Expense): Total[] {
   const total = totalState.find((t) => t.person.id === expense.person.id);
   if (total) total.expenseValue = expense.value;
   return calcTotalExpenses(totalState);
 }
 
+function updateTotalExpense(totalState: Total[], expenses: Expense[], expense: Expense): Total[] {
+  const oldExpense = expenses.find((e) => e.id === expense.id);
+  if (oldExpense) {
+    const oldTotal = totalState.find((t) => t.person.id === oldExpense.person.id);
+    if (oldTotal) oldTotal.expenseValue = 0;
+
+    const total = totalState.find((t) => t.person.id === expense.person.id);
+    if (total) total.expenseValue = expense.value;
+  }
+
+  return calcTotalExpenses(totalState);
+}
+
+function removeTotalExpense(totalState: Total[], expense: Expense): Total[] {
+  const total = totalState.find((t) => t.person.id === expense.person.id);
+  if (total) total.expenseValue -= expense.value;
+  return calcTotalExpenses(totalState);
+}
+
 export {
-  addTotalPerson, updateTotalPerson, removeTotalPerson, updateTotalExpense,
+  addTotalPerson,
+  updateTotalPerson,
+  removeTotalPerson,
+  addTotalExpense,
+  updateTotalExpense,
+  removeTotalExpense,
 };

@@ -13,11 +13,9 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Person } from '../../models/person.model';
 import '../../assets/style/table.css';
 import { ApplicationState, Actions } from '../../store';
-import { Expense } from '../../models/expense.model';
 
 interface StateProps {
   people: Person[];
-  expenses: Expense[];
 }
 
 interface State {
@@ -28,7 +26,6 @@ interface State {
 interface DispatchProps {
   editPersonRequest(data: { state: Person[]; data: Person }): void;
   removePersonRequest(data: { state: Person[]; data: Person }): void;
-  removeExpenseRequest(data: { state: Expense[]; data: Expense }): void;
   loadRequest(): void;
 }
 
@@ -64,10 +61,8 @@ class PeopleTableComponent extends Component<Props, State> {
   render() {
     const {
       people,
-      expenses,
       editPersonRequest,
       removePersonRequest,
-      removeExpenseRequest,
     } = this.props;
     const { editingPerson, editingName } = this.state;
 
@@ -126,13 +121,6 @@ class PeopleTableComponent extends Component<Props, State> {
                             state: people,
                             data: person,
                           });
-                          const expense = expenses.find((e) => e.person === person);
-                          if (expense) {
-                            removeExpenseRequest({
-                              state: expenses,
-                              data: expense,
-                            });
-                          }
                         }}
                       >
                         <BsTrash />
@@ -150,7 +138,6 @@ class PeopleTableComponent extends Component<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   people: state.people.data,
-  expenses: state.expenses.data,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators(Actions, dispatch);

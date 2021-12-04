@@ -2,7 +2,7 @@
 import { Reducer } from 'redux';
 import { Total } from '../../../models/total.model';
 import { BaseStates } from '../base/base.types';
-import { ExpenseTypes } from '../expense/expense.types';
+import { ExpenseTypes } from '../expenses/expenses.types';
 import * as TotalService from '../../../services/total.service';
 import { PersonTypes } from '../people/people.types';
 
@@ -23,7 +23,7 @@ function totalReduce(state: BaseStates<Total> = TOTAL_INITIAL_STATE, action: any
       };
 
     case PersonTypes.PERSON_EDIT_REQUEST:
-      TotalService.updateTotalPerson(data);
+      TotalService.updateTotalPerson(data, action.payload.data);
 
       return {
         ...state, data, loading: true, error: false,
@@ -37,13 +37,26 @@ function totalReduce(state: BaseStates<Total> = TOTAL_INITIAL_STATE, action: any
       };
 
     case ExpenseTypes.EXPENSE_CREATE_REQUEST:
-    case ExpenseTypes.EXPENSE_EDIT_REQUEST:
-    case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
-      TotalService.updateTotalExpense(data, action.payload.data);
+      TotalService.addTotalExpense(data, action.payload.data);
 
       return {
         ...state, data, loading: true, error: false,
       };
+
+    case ExpenseTypes.EXPENSE_EDIT_REQUEST:
+      TotalService.updateTotalExpense(data, action.payload.state, action.payload.data);
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
+    case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
+      TotalService.removeTotalExpense(data, action.payload.data);
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
     default:
       return state;
   }
