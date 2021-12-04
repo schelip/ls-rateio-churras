@@ -14,6 +14,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Person } from '../../models/person.model';
 import { Expense } from '../../models/expense.model';
 import { Actions, ApplicationState } from '../../store';
+import ValueComponent from '../value.component';
 import '../../assets/style/table.css';
 
 interface StateProps {
@@ -148,7 +149,7 @@ class ExpensesTableComponent extends Component<Props, State> {
                 : (
                   <>
                     <td>{expense.person.name}</td>
-                    <td>{expense.value}</td>
+                    <td><ValueComponent>{expense.value}</ValueComponent></td>
                     <td className="actions-col">
                       <Button variant="light" onClick={() => this.updateEditingExpense(expense)}>
                         <BsPencil />

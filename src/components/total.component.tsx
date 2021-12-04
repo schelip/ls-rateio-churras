@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Total } from '../models/total.model';
 import { Actions, ApplicationState } from '../store';
+import ValueComponent from './value.component';
 
 interface TotalStateProps {
   total: Total[]
@@ -58,9 +59,9 @@ class TotalComponent extends Component<TotalStateProps> {
             {total.map((item) => (
               <tr key={item.id}>
                 <td>{item.person.name}</td>
-                <td>{item.expenseValue}</td>
+                <td><ValueComponent>{item.expenseValue}</ValueComponent></td>
                 <td>{item.isReceiving}</td>
-                <td>{item.totalValue}</td>
+                <td><ValueComponent>{item.totalValue}</ValueComponent></td>
               </tr>
             ))}
           </tbody>

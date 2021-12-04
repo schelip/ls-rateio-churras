@@ -8,6 +8,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Summary } from '../models/summary.model';
 import { Actions, ApplicationState } from '../store';
 import '../assets/style/summary.css';
+import ValueComponent from './value.component';
 
 interface SummaryStateProps {
   summary: Summary[]
@@ -30,10 +31,10 @@ class SummaryComponent extends Component<SummaryStateProps> {
               <Col md={6}>{summary[0].peopleCount}</Col>
 
               <Col md={6}><b>Total de gastos</b></Col>
-              <Col md={6}>{summary[0].expensesTotal}</Col>
+              <Col md={6}><ValueComponent>{summary[0].expensesTotal}</ValueComponent></Col>
 
               <Col md={6}><b>Gastos por pessoa</b></Col>
-              <Col md={6}>{summary[0].expensesPerPerson}</Col>
+              <Col md={6}><ValueComponent>{summary[0].expensesPerPerson}</ValueComponent></Col>
             </Row>
             {summary[0].peopleReceiving.length > 0
               ? (
