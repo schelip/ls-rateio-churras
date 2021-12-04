@@ -45,6 +45,7 @@ function summaryReduce(state: BaseStates<Summary> = SUMMARY_INITIAL_STATE, actio
       };
 
     case ExpenseTypes.EXPENSE_CREATE_REQUEST:
+    case ExpenseTypes.EXPENSE_EDIT_REQUEST:
     case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
       data[0] = SummaryService.updateSummaryExpenses(data[0], action.payload.state);
 

@@ -24,6 +24,9 @@ export const removePersonRequest = (data: any) => action(
 export const createExpenseRequest = (data: any) => action(
   ExpenseTypes.EXPENSE_CREATE_REQUEST, data,
 );
+export const editExpenseRequest = (data: any) => action(
+  ExpenseTypes.EXPENSE_EDIT_REQUEST, data,
+);
 export const removeExpenseRequest = (data: any) => action(
   ExpenseTypes.EXPENSE_REMOVE_REQUEST, data,
 );

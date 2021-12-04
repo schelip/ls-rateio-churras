@@ -8,12 +8,15 @@ import {
   Row,
   Col,
 } from 'react-bootstrap';
-import { BsTrash, BsPencil } from 'react-icons/bs';
+import {
+  BsTrash, BsPencil, BsCheck, BsX,
+} from 'react-icons/bs';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Person } from '../models/person.model';
 import { Expense } from '../models/expense.model';
 import { Actions, ApplicationState } from '../store';
+import '../assets/style/table.css';
 
 interface StateProps {
   people: Person[];
@@ -23,10 +26,14 @@ interface StateProps {
 interface State {
   value: number;
   personId: string;
+  editingExpense?: Expense;
+  editingPersonId: string;
+  editingValue: number;
 }
 
 interface DispatchProps {
   createExpenseRequest(data: { state: Expense[], data: Expense }): void;
+  editExpenseRequest(data: { state: Expense[], data: Expense }): void;
   removeExpenseRequest(data: { state: Expense[], data: Expense }): void;
   loadRequest(): void;
 }
@@ -40,10 +47,16 @@ class ExpenseComponent extends Component<Props, State> {
     this.state = {
       value: 0,
       personId: '',
+      editingExpense: undefined,
+      editingPersonId: '',
+      editingValue: 0,
     };
 
     this.updateValue = this.updateValue.bind(this);
     this.updatePerson = this.updatePerson.bind(this);
+    this.updateEditingValue = this.updateEditingValue.bind(this);
+    this.updateEditingPersonId = this.updateEditingPersonId.bind(this);
+    this.updateEditingExpense = this.updateEditingExpense.bind(this);
   }
 
   componentDidMount() {
@@ -69,6 +82,23 @@ class ExpenseComponent extends Component<Props, State> {
     };
   }
 
+  handleEditingDataRequest(expense: Expense) {
+    const { people } = this.props;
+    const { editingPersonId, editingValue } = this.state;
+
+    const person = people.find((p) => p.id === editingPersonId);
+
+    if (!person) {
+      throw Error();
+    }
+
+    const { expenses } = this.props;
+    return {
+      state: expenses,
+      data: { ...expense, person, value: editingValue },
+    };
+  }
+
   updateValue(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ value: Number(event.target.value) });
   }
@@ -77,8 +107,23 @@ class ExpenseComponent extends Component<Props, State> {
     this.setState({ personId: event.target.value });
   }
 
+  updateEditingValue(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ editingValue: Number(event.target.value) });
+  }
+
+  updateEditingPersonId(event: React.ChangeEvent<HTMLSelectElement>) {
+    this.setState({ editingPersonId: event.target.value });
+  }
+
+  updateEditingExpense(expense?: Expense) {
+    this.setState({ editingExpense: expense });
+  }
+
   render() {
-    const { people, expenses, createExpenseRequest } = this.props;
+    const {
+      people, expenses, createExpenseRequest, editExpenseRequest, removeExpenseRequest,
+    } = this.props;
+    const { editingExpense } = this.state;
     return (
       <div className="expense-component">
         <h3>Gastos</h3>
@@ -92,7 +137,7 @@ class ExpenseComponent extends Component<Props, State> {
             <InputGroup>
               <InputGroup.Text>R$</InputGroup.Text>
               <FormControl
-                aria-label="Dollar amount (with dot and two decimal places)"
+                aria-label="Add Expense Value"
                 type="number"
                 placeholder="Valor"
                 onChange={this.updateValue}
@@ -126,19 +171,74 @@ class ExpenseComponent extends Component<Props, State> {
             <tr>
               <th>Nome</th>
               <th>Valor</th>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <th />
+              <th className="actions-col">Ações</th>
             </tr>
           </thead>
           <tbody>
             {expenses.map((expense) => (
               <tr key={expense.id}>
-                <td>{expense.person.name}</td>
-                <td>{expense.value}</td>
-                <td>
-                  <BsPencil />
-                  <BsTrash />
-                </td>
+                {editingExpense === expense
+                  ? (
+                    <>
+                      <td>
+                        <Form.Select onChange={this.updateEditingPersonId}>
+                          <option value="null">Nova pessoa</option>
+                          {people.map((person) => (
+                            <option key={person.id} value={person.id}>
+                              {person.name}
+                            </option>
+                          ))}
+                        </Form.Select>
+                      </td>
+                      <td>
+                        <InputGroup>
+                          <InputGroup.Text>R$</InputGroup.Text>
+                          <FormControl
+                            aria-label="Edit Expense Value"
+                            type="number"
+                            placeholder="Novo Valor"
+                            onChange={this.updateEditingValue}
+                          />
+                        </InputGroup>
+                      </td>
+                      <td className="actions-col">
+                        <Button
+                          variant="light"
+                          onClick={() => {
+                            editExpenseRequest(this.handleEditingDataRequest(expense));
+                            this.updateEditingExpense(undefined);
+                          }}
+                        >
+                          <BsCheck />
+                        </Button>
+                        <Button variant="light" onClick={() => this.updateEditingExpense(undefined)}>
+                          <BsX />
+                        </Button>
+                      </td>
+                    </>
+                  )
+                  : (
+                    <>
+                      <td>{expense.person.name}</td>
+                      <td>{expense.value}</td>
+                      <td className="actions-col">
+                        <Button variant="light" onClick={() => this.updateEditingExpense(expense)}>
+                          <BsPencil />
+                        </Button>
+                        <Button
+                          variant="light"
+                          onClick={() => {
+                            removeExpenseRequest({
+                              state: expenses,
+                              data: expense,
+                            });
+                          }}
+                        >
+                          <BsTrash />
+                        </Button>
+                      </td>
+                    </>
+                  )}
               </tr>
             ))}
           </tbody>

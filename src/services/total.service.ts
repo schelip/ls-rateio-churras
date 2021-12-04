@@ -20,38 +20,28 @@ function calcTotalExpenses(totalState: Total[]) {
   });
 }
 
-function addTotalPerson(totalState: Total[], person: Person): Total[] {
-  totalState.push(new Total(person, 0, 0, ReceivingEnum.no));
-  return calcTotalExpenses(totalState);
-}
-
-function editTotalPerson(totalState: Total[], person: Person): Total[] {
-  const existingTotal = totalState.find((t) => t.person.id === person.id);
-  if (existingTotal) existingTotal.person = person;
-  return calcTotalExpenses(totalState);
-}
-
-function removeTotalPerson(totalState: Total[], person: Person): Total[] {
-  const index = totalState.findIndex((t) => t.person.id === person.id, 0);
-  if (index > -1) {
-    totalState.splice(index, 1);
+function updateTotalPeople(totalState: Total[], people: Person[]): Total[] {
+  if (people.length > totalState.length) {
+    const person = people.find((p) => !totalState.find((t) => t.person === p));
+    if (person) totalState.push(new Total(person, 0, 0, ReceivingEnum.no));
+  } else if (people.length < totalState.length) {
+    const index = totalState.findIndex((t) => !people.includes(t.person), 0);
+    if (index > -1) {
+      totalState.splice(index, 1);
+    }
   }
-
   return calcTotalExpenses(totalState);
 }
 
-function addNewExpense(totalState: Total[], expense: Expense): Total[] {
-  const total = totalState.find((t) => t.person.id === expense.person.id);
-
-  if (!total) {
-    return totalState;
-  }
-
-  total.expenseValue += expense.value;
+function updateTotalExpenses(totalState: Total[], expenses: Expense[]): Total[] {
+  totalState.forEach((total) => {
+    const expense = expenses.find((e) => e.person.id === total.person.id);
+    total.expenseValue = expense ? expense.value : 0;
+  });
 
   return calcTotalExpenses(totalState);
 }
 
 export {
-  addTotalPerson, editTotalPerson, removeTotalPerson, addNewExpense,
+  updateTotalPeople, updateTotalExpenses,
 };

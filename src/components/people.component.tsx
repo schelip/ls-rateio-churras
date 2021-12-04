@@ -13,7 +13,7 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Person } from '../models/person.model';
-import '../assets/style/people.css';
+import '../assets/style/table.css';
 import { ApplicationState, Actions } from '../store';
 import { Expense } from '../models/expense.model';
 

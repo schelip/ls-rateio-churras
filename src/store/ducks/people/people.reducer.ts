@@ -23,8 +23,8 @@ function peopleReduce(state: BaseStates<Person> = INITIAL_STATE_PEOPLE, action: 
 
     case PersonTypes.PERSON_EDIT_REQUEST:
       if (action.payload.data) {
-        const person = data.find((p) => p.id === action.payload.data.id);
-        if (person) person.name = action.payload.data.name;
+        const index = data.findIndex((p) => p.id === action.payload.data.id);
+        if (index > -1) Object.assign(data[index], action.payload.data);
       }
       return {
         ...state, data: [...data], loading: true, error: false,
