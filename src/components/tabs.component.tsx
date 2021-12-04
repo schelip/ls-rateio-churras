@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
-import PeopleComponent from './people.component';
-import ExpensesComponent from './expenses.component';
+import PeopleComponent from './people/people.component';
+import ExpensesComponent from './expenses/expenses.component';
 import TotalComponent from './total.component';
 
 function TabComponent(): JSX.Element {

@@ -8,9 +8,9 @@ import {
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Person } from '../models/person.model';
-import '../assets/style/table.css';
-import { ApplicationState, Actions } from '../store';
+import { Person } from '../../models/person.model';
+import '../../assets/style/table.css';
+import { ApplicationState, Actions } from '../../store';
 import PeopleTableComponent from './people.table.component';
 
 interface StateProps {

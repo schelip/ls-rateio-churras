@@ -9,10 +9,10 @@ import {
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Person } from '../models/person.model';
-import { Expense } from '../models/expense.model';
-import { Actions, ApplicationState } from '../store';
-import '../assets/style/table.css';
+import { Person } from '../../models/person.model';
+import { Expense } from '../../models/expense.model';
+import { Actions, ApplicationState } from '../../store';
+import '../../assets/style/table.css';
 import ExpensesTableComponent from './expenses.table.component';
 
 interface StateProps {
