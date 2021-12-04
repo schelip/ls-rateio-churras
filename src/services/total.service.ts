@@ -4,7 +4,7 @@ import { Person } from '../models/person.model';
 import { Expense } from '../models/expense.model';
 import { Total, ReceivingEnum } from '../models/total.model';
 
-function calcTotalSpend(totalState: Total[]) {
+function calcTotalExpenses(totalState: Total[]) {
   const expensesSum = totalState.reduce((a, t) => a + t.expenseValue, 0);
   const expensesPerPerson = (expensesSum / totalState.length) * -1;
 
@@ -20,22 +20,55 @@ function calcTotalSpend(totalState: Total[]) {
   });
 }
 
-function addNewPerson(totalState: Total[], person: Person): Total[] {
+function addTotalPerson(totalState: Total[], person: Person): Total[] {
   totalState.push(new Total(person, 0, 0, ReceivingEnum.no));
-
-  return calcTotalSpend(totalState);
+  return calcTotalExpenses(totalState);
 }
 
-function addNewExpense(totalState: Total[], expense: Expense): Total[] {
-  const total = totalState.find((t) => t.person.id === expense.person.id);
+function updateTotalPerson(totalState: Total[], person: Person): Total[] {
+  const total = totalState.find((t) => t.person.id === person.id);
+  if (total) total.person = person;
+  return calcTotalExpenses(totalState);
+}
 
-  if (!total) {
-    return totalState;
+function removeTotalPerson(totalState: Total[], person: Person): Total[] {
+  const index = totalState.findIndex((t) => t.person.id === person.id);
+  if (index > -1) {
+    totalState.splice(index, 1);
+  }
+  return calcTotalExpenses(totalState);
+}
+
+function addTotalExpense(totalState: Total[], expense: Expense): Total[] {
+  const total = totalState.find((t) => t.person.id === expense.person.id);
+  if (total) total.expenseValue = expense.value;
+  return calcTotalExpenses(totalState);
+}
+
+function updateTotalExpense(totalState: Total[], expenses: Expense[], expense: Expense): Total[] {
+  const oldExpense = expenses.find((e) => e.id === expense.id);
+  if (oldExpense) {
+    const oldTotal = totalState.find((t) => t.person.id === oldExpense.person.id);
+    if (oldTotal) oldTotal.expenseValue = 0;
+
+    const total = totalState.find((t) => t.person.id === expense.person.id);
+    if (total) total.expenseValue = expense.value;
   }
 
-  total.expenseValue += expense.value;
-
-  return calcTotalSpend(totalState);
+  return calcTotalExpenses(totalState);
 }
 
-export { addNewPerson, addNewExpense };
+function removeTotalExpense(totalState: Total[], expense: Expense): Total[] {
+  const total = totalState.find((t) => t.person.id === expense.person.id);
+  if (total) total.expenseValue -= expense.value;
+  return calcTotalExpenses(totalState);
+}
+
+export {
+  addTotalPerson,
+  updateTotalPerson,
+  removeTotalPerson,
+  addTotalExpense,
+  updateTotalExpense,
+  removeTotalExpense,
+};

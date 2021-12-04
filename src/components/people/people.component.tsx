@@ -4,32 +4,31 @@ import {
   FormControl,
   InputGroup,
   Row,
-  Table,
   Col,
 } from 'react-bootstrap';
-import { BsTrash, BsPencil } from 'react-icons/bs';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Person } from '../models/person.model';
-
-import { ApplicationState, Actions } from '../store';
+import { Person } from '../../models/person.model';
+import '../../assets/style/table.css';
+import { ApplicationState, Actions } from '../../store';
+import PeopleTableComponent from './people.table.component';
 
 interface StateProps {
-    people: Person[];
+  people: Person[];
 }
 
 interface State {
-    name: string;
+  name: string;
 }
 
 interface DispatchProps {
-    createPersonRequest(data: { state: Person[]; data: Person }): void;
-    loadRequest(): void;
+  createPersonRequest(data: { state: Person[]; data: Person }): void;
+  loadRequest(): void;
 }
 
 type Props = StateProps & DispatchProps;
 
-class PersonComponent extends Component<Props, State> {
+class PeopleComponent extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -51,7 +50,10 @@ class PersonComponent extends Component<Props, State> {
   }
 
   render() {
-    const { people, createPersonRequest } = this.props;
+    const {
+      people,
+      createPersonRequest,
+    } = this.props;
     const { name } = this.state;
 
     return (
@@ -93,35 +95,16 @@ class PersonComponent extends Component<Props, State> {
 
         <hr />
 
-        <Table striped bordered hover variant="dark">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {people.map((person) => (
-              <tr key={person.id}>
-                <td>{person.name}</td>
-                <td>
-                  <BsPencil />
-                  <BsTrash />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <PeopleTableComponent />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  people: state.person.data,
+  people: state.people.data,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators(Actions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(PersonComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(PeopleComponent);

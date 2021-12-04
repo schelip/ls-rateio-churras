@@ -4,35 +4,35 @@ import {
   Form,
   FormControl,
   InputGroup,
-  Table,
   Row,
   Col,
 } from 'react-bootstrap';
-import { BsTrash, BsPencil } from 'react-icons/bs';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Person } from '../models/person.model';
-import { Expense } from '../models/expense.model';
-import { Actions, ApplicationState } from '../store';
+import { Person } from '../../models/person.model';
+import { Expense } from '../../models/expense.model';
+import { Actions, ApplicationState } from '../../store';
+import '../../assets/style/table.css';
+import ExpensesTableComponent from './expenses.table.component';
 
 interface StateProps {
-    people: Person[];
-    expenses: Expense[];
+  people: Person[];
+  expenses: Expense[];
 }
 
 interface State {
-    value: number;
-    personId: string;
+  value: number;
+  personId: string;
 }
 
 interface DispatchProps {
-    createExpenseRequest(data: { state: Expense[], data: Expense }): void;
-    loadRequest(): void;
+  createExpenseRequest(data: { state: Expense[], data: Expense }): void;
+  loadRequest(): void;
 }
 
 type Props = StateProps & DispatchProps;
 
-class ExpenseComponent extends Component<Props, State> {
+class ExpensesComponent extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -77,7 +77,9 @@ class ExpenseComponent extends Component<Props, State> {
   }
 
   render() {
-    const { people, expenses, createExpenseRequest } = this.props;
+    const {
+      people, createExpenseRequest,
+    } = this.props;
     return (
       <div className="expense-component">
         <h3>Gastos</h3>
@@ -91,7 +93,7 @@ class ExpenseComponent extends Component<Props, State> {
             <InputGroup>
               <InputGroup.Text>R$</InputGroup.Text>
               <FormControl
-                aria-label="Dollar amount (with dot and two decimal places)"
+                aria-label="Add Expense Value"
                 type="number"
                 placeholder="Valor"
                 onChange={this.updateValue}
@@ -117,41 +119,18 @@ class ExpenseComponent extends Component<Props, State> {
             </Button>
           </Col>
         </Row>
-
         <hr />
-
-        <Table striped bordered hover variant="dark">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Valor</th>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {expenses.map((expense) => (
-              <tr key={expense.id}>
-                <td>{expense.person.name}</td>
-                <td>{expense.value}</td>
-                <td>
-                  <BsPencil />
-                  <BsTrash />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <ExpensesTableComponent />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  people: state.person.data,
-  expenses: state.expense.data,
+  people: state.people.data,
+  expenses: state.expenses.data,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators(Actions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ExpenseComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ExpensesComponent);

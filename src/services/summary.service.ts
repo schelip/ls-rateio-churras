@@ -1,32 +1,26 @@
 import { Expense } from '../models/expense.model';
+import { Person } from '../models/person.model';
 import { Summary } from '../models/summary.model';
 
-function updateSummaryPeople(summary: Summary): Summary {
-  const updatedSummary = summary;
-  if (summary.expensesPerPerson > 0) {
-    updatedSummary.expensesPerPerson = (summary.expensesPerPerson * summary.peopleCount)
-    / (summary.peopleCount + 1);
-  }
-  updatedSummary.peopleCount = summary.peopleCount + 1;
-  return updatedSummary;
-}
+function updateSummary(summary: Summary, people: Person[], expenses: Expense[]): Summary {
+  const peopleCount = people.length;
+  const expensesTotal = expenses.reduce((a, s) => a + s.value, 0);
+  const expensesPerPerson = peopleCount !== 0 ? (expensesTotal / peopleCount) : 0;
 
-function updateSummaryExpenses(summary: Summary, expenses: Expense[]): Summary {
-  const updatedSummary = summary;
-  const expensesSum = expenses.reduce((a, s) => a + s.value, 0);
-  updatedSummary.expensesPerPerson = (expensesSum / summary.peopleCount);
-
-  const people = expenses.map((s) => s.person);
-  updatedSummary.peopleReceiving = people.filter((p) => {
+  const peopleReceiving = expenses.map((s) => s.person).filter((p) => {
     const expense = expenses.find((s) => s.person.id === p.id);
     if (!expense) {
       return false;
     }
 
-    return expense.value > updatedSummary.expensesPerPerson;
+    return expense.value > expensesPerPerson;
   });
 
-  return updatedSummary;
+  return {
+    ...summary, peopleCount, expensesTotal, expensesPerPerson, peopleReceiving,
+  };
 }
 
-export { updateSummaryPeople, updateSummaryExpenses };
+export {
+  updateSummary,
+};

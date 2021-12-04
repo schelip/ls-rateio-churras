@@ -2,9 +2,9 @@
 import { Reducer } from 'redux';
 import { Total } from '../../../models/total.model';
 import { BaseStates } from '../base/base.types';
-import { ExpenseTypes } from '../expense/expense.types';
+import { ExpenseTypes } from '../expenses/expenses.types';
 import * as TotalService from '../../../services/total.service';
-import { PersonTypes } from '../person/person.types';
+import { PersonTypes } from '../people/people.types';
 
 const TOTAL_INITIAL_STATE = {
   data: [],
@@ -13,21 +13,50 @@ const TOTAL_INITIAL_STATE = {
 };
 
 function totalReduce(state: BaseStates<Total> = TOTAL_INITIAL_STATE, action: any): any {
-  const people = [...state.data];
-  const expenses = [...state.data];
+  const data = [...state.data];
   switch (action.type) {
     case PersonTypes.PERSON_CREATE_REQUEST:
-      TotalService.addNewPerson(people, action.payload.data);
+      TotalService.addTotalPerson(data, action.payload.data);
 
       return {
-        ...state, data: people, loading: true, error: false,
+        ...state, data, loading: true, error: false,
       };
-    case ExpenseTypes.EXPENSE_CREATE:
-      TotalService.addNewExpense(expenses, action.payload.data);
+
+    case PersonTypes.PERSON_EDIT_REQUEST:
+      TotalService.updateTotalPerson(data, action.payload.data);
 
       return {
-        ...state, data: expenses, loading: true, error: false,
+        ...state, data, loading: true, error: false,
       };
+
+    case PersonTypes.PERSON_REMOVE_REQUEST:
+      TotalService.removeTotalPerson(data, action.payload.data);
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
+    case ExpenseTypes.EXPENSE_CREATE_REQUEST:
+      TotalService.addTotalExpense(data, action.payload.data);
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
+    case ExpenseTypes.EXPENSE_EDIT_REQUEST:
+      TotalService.updateTotalExpense(data, action.payload.state, action.payload.data);
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
+    case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
+      TotalService.removeTotalExpense(data, action.payload.data);
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
     default:
       return state;
   }

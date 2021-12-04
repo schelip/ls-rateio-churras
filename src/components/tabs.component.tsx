@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
-import PersonComponent from './person.component';
-import ExpenseComponent from './expense.component';
+import PeopleComponent from './people/people.component';
+import ExpensesComponent from './expenses/expenses.component';
 import TotalComponent from './total.component';
 
 function TabComponent(): JSX.Element {
@@ -12,10 +12,10 @@ function TabComponent(): JSX.Element {
       className="mb-4 mt-3"
     >
       <Tab eventKey="people" title="Pessoas">
-        <PersonComponent />
+        <PeopleComponent />
       </Tab>
       <Tab eventKey="expenses" title="Gastos">
-        <ExpenseComponent />
+        <ExpensesComponent />
       </Tab>
       <Tab eventKey="total" title="Total">
         <TotalComponent />

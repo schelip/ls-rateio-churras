@@ -28,6 +28,10 @@ class SummaryComponent extends Component<SummaryStateProps> {
             <Row>
               <Col md={6}><b>Total de pessoas</b></Col>
               <Col md={6}>{summary[0].peopleCount}</Col>
+
+              <Col md={6}><b>Total de gastos</b></Col>
+              <Col md={6}>{summary[0].expensesTotal}</Col>
+
               <Col md={6}><b>Gastos por pessoa</b></Col>
               <Col md={6}>{summary[0].expensesPerPerson}</Col>
             </Row>

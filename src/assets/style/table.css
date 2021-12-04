@@ -1,0 +1,13 @@
+th.actions-col {
+    width: 15%;
+}
+
+td.actions-col button {
+    padding: 1px 6px;
+    margin-right: 16px;
+}
+
+td.actions-col button:hover {
+    background-color: #ccc;
+    border-color: #ccc;
+}
