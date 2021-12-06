@@ -1,26 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Reducer } from 'redux';
-import { Expense } from '../../../models/expense.model';
+import { Payment } from '../../../models/payment.model';
 import { BaseStates } from '../base/base.types';
-import { ExpenseTypes } from './expenses.types';
+import { PaymentTypes } from './payments.types';
 
-const EXPENSE_INITIAL_STATE = {
+const PAYMENT_INITIAL_STATE = {
   data: [],
   loading: false,
   error: false,
 };
 
-function expenseReduce(
-  state: BaseStates<Expense> = EXPENSE_INITIAL_STATE,
+function paymentReduce(
+  state: BaseStates<Payment> = PAYMENT_INITIAL_STATE,
   action: any,
-): BaseStates<Expense> {
+): BaseStates<Payment> {
   const data = [...state.data];
   switch (action.type) {
-    case ExpenseTypes.EXPENSE_CREATE_REQUEST:
+    case PaymentTypes.PAYMENT_CREATE_REQUEST:
       if (action.payload.data) {
-        const existingExpense = data.find((e) => e.person === action.payload.data.person);
-        if (existingExpense) {
-          existingExpense.value = action.payload.data.value;
+        const existingPayment = data.find((p) => p.personPaying === action.payload.data.personPaying
+          && p.personReceiving === action.payload.data.personReceiving);
+        if (existingPayment) {
+          existingPayment.value = action.payload.data.value;
         } else data.push(action.payload.data);
       }
 
@@ -28,9 +29,9 @@ function expenseReduce(
         ...state, data, loading: true, error: false,
       };
 
-    case ExpenseTypes.EXPENSE_EDIT_REQUEST:
+    case PaymentTypes.PAYMENT_EDIT_REQUEST:
       if (action.payload.data) {
-        const index = data.findIndex((e) => e.id === action.payload.data.id);
+        const index = data.findIndex((p) => p.id === action.payload.data.id);
         if (index > -1) data[index] = { ...action.payload.data };
       }
 
@@ -38,7 +39,7 @@ function expenseReduce(
         ...state, data, loading: true, error: false,
       };
 
-    case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
+    case PaymentTypes.PAYMENT_REMOVE_REQUEST:
       if (action.payload.data) {
         const index = data.indexOf(action.payload.data, 0);
         if (index > -1) {
@@ -56,6 +57,6 @@ function expenseReduce(
 }
 
 // eslint-disable-next-line max-len
-const expenseReducer: Reducer<BaseStates<Expense>> = (state, action) => expenseReduce(state, action);
+const paymentReducer: Reducer<BaseStates<Payment>> = (state, action) => paymentReduce(state, action);
 
-export { expenseReducer };
+export { paymentReducer };

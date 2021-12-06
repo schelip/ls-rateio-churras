@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { Component } from 'react';
 import { Accordion, Table } from 'react-bootstrap';
+import { BsCheck2 } from 'react-icons/bs';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Total } from '../models/total.model';
+import { ReceivingEnum, Total } from '../models/total.model';
 import { Actions, ApplicationState } from '../store';
 import ValueComponent from './value.component';
 
@@ -25,21 +26,13 @@ class TotalComponent extends Component<TotalStateProps> {
             <Accordion.Header>Entenda o resultado</Accordion.Header>
             <Accordion.Body>
               <p>
-                Quem está
-                {' '}
-                <b>negativo</b>
-                {' '}
-                deverá pagar a quantidade indicada pelo valor total, e quem está
-                {' '}
-                <b>positivo</b>
-                {' '}
-                deverá receber a quantidade indicada.
-              </p>
-              <p>
                 O cálculo do rateio é feito da seguinte forma:
                 {' '}
                 <b>(soma dos gastos / número de pessoas) - valor pago por pessoa</b>
                 .
+              </p>
+              <p>
+                O Total será atualizado ao cadastrar os pagamentos na próxima aba.
               </p>
             </Accordion.Body>
           </Accordion.Item>
@@ -51,8 +44,8 @@ class TotalComponent extends Component<TotalStateProps> {
             <tr>
               <th>Nome</th>
               <th>Valor do gasto</th>
-              <th>Vai restituir</th>
               <th>Valor total</th>
+              <th>Situação</th>
             </tr>
           </thead>
           <tbody>
@@ -60,8 +53,23 @@ class TotalComponent extends Component<TotalStateProps> {
               <tr key={item.id}>
                 <td>{item.person.name}</td>
                 <td><ValueComponent>{item.expenseValue}</ValueComponent></td>
-                <td>{item.isReceiving}</td>
                 <td><ValueComponent>{item.totalValue}</ValueComponent></td>
+                <td>
+                  {item.isReceiving === ReceivingEnum.equal ? (
+                    <>
+                      <BsCheck2 />
+                      {' '}
+                      {' Concluído'}
+                    </>
+                  ) : (
+                    <>
+                      {item.isReceiving}
+                      {' '}
+                      <ValueComponent>{item.remainingValue}</ValueComponent>
+                    </>
+                  )}
+                  {' '}
+                </td>
               </tr>
             ))}
           </tbody>

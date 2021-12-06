@@ -14,18 +14,22 @@ export class Total extends BaseModel {
 
     totalValue: number;
 
+    remainingValue: number
+
     isReceiving: ReceivingEnum;
 
     constructor(
       person: Person,
       expenseValue: number,
       totalValue: number,
+      remainingValue: number,
       isReceiving: ReceivingEnum,
     ) {
       super();
       this.person = person;
       this.expenseValue = expenseValue;
       this.totalValue = totalValue;
+      this.remainingValue = remainingValue;
       this.isReceiving = isReceiving;
     }
 }
