@@ -22,8 +22,8 @@ export const editPersonRequestThunk = (payload: any) => (dispatch: any, getState
   const { expenses, payments } = getState();
   const person = payload.data;
   const expense = expenses.data.find((e: Expense) => e.person.id === person.id);
-  const paymentList = person.findAll(
-    (p: Payment) => p.personPaying === person.id || p.personReceiving === person.id,
+  const paymentList = payments.data.filter(
+    (p: Payment) => p.personPaying.id === person.id || p.personReceiving.id === person.id,
   );
   if (expense) {
     dispatch(
@@ -41,20 +41,20 @@ export const editPersonRequestThunk = (payload: any) => (dispatch: any, getState
         action(PaymentTypes.PAYMENT_EDIT_REQUEST, {
           state: payments.data,
           data: person.id === payment.personPaying.id
-            ? { ...payment, personPayin: person }
+            ? { ...payment, personPaying: person }
             : { ...payment, personReceiving: person },
         }),
       );
     });
   }
 
-  const { people, updatedExpenses, updatedPayments } = getState();
+  const { people, expenses: updatedExpenses, payments: updatedPayments } = getState();
   dispatch(action(SummaryTypes.SUMMARY_UPDATE_REQUEST, { people, expenses: updatedExpenses }));
-  dispatch(action(TotalTypes.TOTAL_UPDATE_REQUEST), {
+  dispatch(action(TotalTypes.TOTAL_UPDATE_REQUEST, {
     people,
     expenses: updatedExpenses,
     payments: updatedPayments,
-  });
+  }));
 };
 
 export const removePersonRequestThunk = (payload: any) => (dispatch: any, getState: any) => {
@@ -62,8 +62,8 @@ export const removePersonRequestThunk = (payload: any) => (dispatch: any, getSta
   const { expenses, payments } = getState();
   const person = payload.data;
   const expense = expenses.data.find((e: Expense) => e.person.id === person.id);
-  const paymentList = person.findAll(
-    (p: Payment) => p.personPaying === person.id || p.personReceiving === person.id,
+  const paymentList = payments.data.filter(
+    (p: Payment) => p.personPaying.id === person.id || p.personReceiving.id === person.id,
   );
   if (expense) {
     dispatch(
@@ -82,11 +82,11 @@ export const removePersonRequestThunk = (payload: any) => (dispatch: any, getSta
     });
   }
 
-  const { people, updatedExpenses, updatedPayments } = getState();
+  const { people, expenses: updatedExpenses, payments: updatedPayments } = getState();
   dispatch(action(SummaryTypes.SUMMARY_UPDATE_REQUEST, { people, expenses: updatedExpenses }));
-  dispatch(action(TotalTypes.TOTAL_UPDATE_REQUEST), {
+  dispatch(action(TotalTypes.TOTAL_UPDATE_REQUEST, {
     people,
     expenses: updatedExpenses,
     payments: updatedPayments,
-  });
+  }));
 };
