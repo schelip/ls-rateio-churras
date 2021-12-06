@@ -1,0 +1,7 @@
+/* eslint-disable no-shadow */
+
+export enum TotalTypes {
+    TOTAL_UPDATE_SUCCESS = 'TOTAL_UPDATE_SUCCESS',
+    TOTAL_UPDATE_REQUEST = 'TOTAL_UPDATE_REQUEST',
+    TOTAL_UPDATE_FAILURE = 'TOTAL_UPDATE_FAILURE'
+}

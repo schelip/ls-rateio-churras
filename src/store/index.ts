@@ -7,12 +7,14 @@ import { Summary } from '../models/summary.model';
 import { Total } from '../models/total.model';
 import { BaseStates } from './ducks/base/base.types';
 import rootReducer from './ducks/rootReducer';
+import { Payment } from '../models/payment.model';
 
 export interface ApplicationState {
     people: BaseStates<Person>;
     expenses: BaseStates<Expense>;
     total: BaseStates<Total>;
     summary: BaseStates<Summary>;
+    payments: BaseStates<Payment>
 }
 
 const store: Store<ApplicationState> = createStore(

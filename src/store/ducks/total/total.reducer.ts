@@ -2,9 +2,8 @@
 import { Reducer } from 'redux';
 import { Total } from '../../../models/total.model';
 import { BaseStates } from '../base/base.types';
-import { ExpenseTypes } from '../expenses/expenses.types';
 import * as TotalService from '../../../services/total.service';
-import { PersonTypes } from '../people/people.types';
+import { TotalTypes } from './total.types';
 
 const TOTAL_INITIAL_STATE = {
   data: [],
@@ -15,43 +14,13 @@ const TOTAL_INITIAL_STATE = {
 function totalReduce(state: BaseStates<Total> = TOTAL_INITIAL_STATE, action: any): any {
   const data = [...state.data];
   switch (action.type) {
-    case PersonTypes.PERSON_CREATE_REQUEST:
-      TotalService.addTotalPerson(data, action.payload.data);
-
-      return {
-        ...state, data, loading: true, error: false,
-      };
-
-    case PersonTypes.PERSON_EDIT_REQUEST:
-      TotalService.updateTotalPerson(data, action.payload.data);
-
-      return {
-        ...state, data, loading: true, error: false,
-      };
-
-    case PersonTypes.PERSON_REMOVE_REQUEST:
-      TotalService.removeTotalPerson(data, action.payload.data);
-
-      return {
-        ...state, data, loading: true, error: false,
-      };
-
-    case ExpenseTypes.EXPENSE_CREATE_REQUEST:
-      TotalService.addTotalExpense(data, action.payload.data);
-
-      return {
-        ...state, data, loading: true, error: false,
-      };
-
-    case ExpenseTypes.EXPENSE_EDIT_REQUEST:
-      TotalService.updateTotalExpense(data, action.payload.state, action.payload.data);
-
-      return {
-        ...state, data, loading: true, error: false,
-      };
-
-    case ExpenseTypes.EXPENSE_REMOVE_REQUEST:
-      TotalService.removeTotalExpense(data, action.payload.data);
+    case TotalTypes.TOTAL_UPDATE_REQUEST:
+      TotalService.updateTotal(
+        data,
+        action.payload.people.data,
+        action.payload.expenses.data,
+        action.payload.payments.data,
+      );
 
       return {
         ...state, data, loading: true, error: false,
