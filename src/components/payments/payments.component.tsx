@@ -93,7 +93,7 @@ class PaymentsComponent extends Component<Props, State> {
     } = this.state;
     return (
       <div className="payments-component">
-        <h3>Gastos</h3>
+        <h3>Pagamentos</h3>
         <p>
           Cadastre quem pagou quem e quanto foi pago no rolê.
         </p>
@@ -122,7 +122,7 @@ class PaymentsComponent extends Component<Props, State> {
           </Col>
           <Col lg="3">
             <Form.Select onChange={this.updatePersonReceiving}>
-              <option value="null">Quem pagou</option>
+              <option value="null">Quem recebeu</option>
               {people.filter((p) => p.id !== personPayingId).map((person) => (
                 <option key={person.id} value={person.id}>
                   {person.name}
