@@ -63,7 +63,7 @@ class DatesComponent extends Component<Props, State> {
     }
 
     const { dates } = person;
-    const date = startDate;
+    const date = new Date(startDate);
 
     while (date.getDate() <= endDate.getDate()) {
       if (!dates.find((d) => d.getDate() === date.getDate())) dates.push(new Date(date));
@@ -102,7 +102,7 @@ class DatesComponent extends Component<Props, State> {
         <Row className="justify-content-md-center">
           <Col lg="3">
             <Form.Select onChange={this.updatePerson}>
-              <option value="null">Pessoa</option>
+              <option value="null">Selecione a Pessoa</option>
               {people.map((person) => (
                 <option key={person.id} value={person.id}>
                   {person.name}

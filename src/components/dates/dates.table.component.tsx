@@ -49,15 +49,19 @@ class DatesTableComponent extends Component<Props, State> {
     const { date } = this.state;
     if (people !== prevProps.people) {
       const dates: Date[] = [];
+      let currDateHasPeople = false;
       people.forEach((p) => {
         p.dates.forEach((personDate) => {
           if (!dates.find((stateDate) => stateDate.getDate() === personDate.getDate())) {
             dates.push(personDate);
           }
+          if (personDate.getDate() === date?.getDate()) {
+            currDateHasPeople = true;
+          }
         });
       });
       dates.sort((a, b) => a.getDate() - b.getDate());
-      this.updateDates(dates, date || dates[0]);
+      this.updateDates(dates, date && currDateHasPeople ? date : dates[0]);
     }
   }
 
@@ -66,7 +70,7 @@ class DatesTableComponent extends Component<Props, State> {
     const { date } = this.state;
     const { dates } = person;
 
-    const index = dates.findIndex((d) => d === date);
+    const index = dates.findIndex((d) => d.getDate() === date?.getDate());
     if (index > -1) {
       dates.splice(index, 1);
     }

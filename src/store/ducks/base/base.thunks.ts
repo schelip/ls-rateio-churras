@@ -16,25 +16,36 @@ export const updateSummaryAndTotalRequestThunk = (act: any) => (dispatch: any, g
   dispatch(action(TotalTypes.TOTAL_UPDATE_REQUEST, { people, expenses, payments }));
 };
 
-// person
 export const editPersonRequestThunk = (payload: any) => (dispatch: any, getState: any) => {
   dispatch(action(PersonTypes.PERSON_EDIT_REQUEST, payload));
   const { expenses, payments } = getState();
   const person = payload.data;
-  const expense = expenses.data.find((e: Expense) => e.person.id === person.id);
+  const personExpenses = expenses.data.filter((e: Expense) => e.person.id === person.id);
   const paymentList = payments.data.filter(
     (p: Payment) => p.personPaying.id === person.id || p.personReceiving.id === person.id,
   );
-  if (expense) {
-    dispatch(
-      action(ExpenseTypes.EXPENSE_EDIT_REQUEST, {
-        state: expenses.data,
-        data: {
-          ...expense, person,
-        },
-      }),
-    );
-  }
+
+  personExpenses.forEach((expense: Expense) => {
+    // remove expenses from removed days
+    if (!person.dates.find((d: Date) => d.getDate() === expense.date.getDate())) {
+      dispatch(
+        action(ExpenseTypes.EXPENSE_REMOVE_REQUEST, {
+          state: expenses.data,
+          data: expense,
+        }),
+      );
+    } else {
+      dispatch(
+        action(ExpenseTypes.EXPENSE_EDIT_REQUEST, {
+          state: expenses.data,
+          data: {
+            ...expense, person,
+          },
+        }),
+      );
+    }
+  });
+
   if (paymentList.length > 0) {
     paymentList.forEach((payment: Payment) => {
       dispatch(

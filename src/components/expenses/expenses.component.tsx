@@ -92,8 +92,8 @@ class ExpensesComponent extends Component<Props, State> {
       <div className="expense-component">
         <h3>Gastos</h3>
         <p>
-          Cadastre os valores que foram gastos no rolê
-          e quem pagou.
+          Cadastre os valores que foram gastos em cada dia
+          do rolê e quem pagou.
         </p>
 
         <Row className="justify-content-md-center">
