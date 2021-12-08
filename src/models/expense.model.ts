@@ -6,9 +6,12 @@ export class Expense extends BaseModel {
 
     value: number;
 
-    constructor(person: Person, value: number) {
+    date: Date;
+
+    constructor(person: Person, value: number, date: Date) {
       super();
       this.person = person;
       this.value = value;
+      this.date = date;
     }
 }

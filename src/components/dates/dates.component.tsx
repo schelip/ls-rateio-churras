@@ -10,42 +10,40 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Person } from '../../models/person.model';
-import { Expense } from '../../models/expense.model';
 import { Actions, ApplicationState } from '../../store';
 import '../../assets/style/table.css';
-import ExpensesTableComponent from './expenses.table.component';
+import DatesTableComponent from './dates.table.component';
 
 interface StateProps {
   people: Person[];
-  expenses: Expense[];
 }
 
 interface State {
-  value: number;
-  date: Date;
+  startDate: Date;
+  endDate: Date;
   personId: string;
 }
 
 interface DispatchProps {
-  createExpenseRequest(data: { state: Expense[], data: Expense }): void;
+  editPersonRequest(data: { state: Person[], data: Person }): void;
   loadRequest(): void;
 }
 
 type Props = StateProps & DispatchProps;
 
-class ExpensesComponent extends Component<Props, State> {
+class DatesComponent extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      value: 0,
+      startDate: new Date(),
+      endDate: new Date(),
       personId: '',
-      date: new Date(),
     };
 
-    this.updateValue = this.updateValue.bind(this);
+    this.updateStartDate = this.updateStartDate.bind(this);
+    this.updateEndDate = this.updateEndDate.bind(this);
     this.updatePerson = this.updatePerson.bind(this);
-    this.updateDate = this.updateDate.bind(this);
   }
 
   componentDidMount() {
@@ -56,27 +54,35 @@ class ExpensesComponent extends Component<Props, State> {
 
   handleDataRequest() {
     const { people } = this.props;
-    const { personId, value, date } = this.state;
+    const { startDate, endDate, personId } = this.state;
 
     const person = people.find((p) => p.id === personId);
 
-    if (!person || !person.dates.find((d) => d.getDate() === date.getDate())) {
+    if (!person) {
       throw Error();
     }
 
-    const { expenses } = this.props;
+    const { dates } = person;
+    const date = startDate;
+
+    while (date.getDate() <= endDate.getDate()) {
+      if (!dates.find((d) => d.getDate() === date.getDate())) dates.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+    dates.sort();
+
     return {
-      state: expenses,
-      data: new Expense(person, value, date),
+      state: people,
+      data: { ...person, dates },
     };
   }
 
-  updateDate(event: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({ date: new Date(event.target.value) });
+  updateStartDate(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ startDate: new Date(event.target.value) });
   }
 
-  updateValue(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ value: Number(event.target.value) });
+  updateEndDate(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ endDate: new Date(event.target.value) });
   }
 
   updatePerson(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -85,21 +91,18 @@ class ExpensesComponent extends Component<Props, State> {
 
   render() {
     const {
-      people, createExpenseRequest,
+      people, editPersonRequest,
     } = this.props;
-    const { personId } = this.state;
     return (
       <div className="expense-component">
-        <h3>Gastos</h3>
+        <h3>Datas</h3>
         <p>
-          Cadastre os valores que foram gastos no rolê
-          e quem pagou.
+          Cadastre quem participou em qual dia do rolê para que sejam cobrados corretamente.
         </p>
-
         <Row className="justify-content-md-center">
           <Col lg="3">
             <Form.Select onChange={this.updatePerson}>
-              <option value="null">Quem pagou</option>
+              <option value="null">Pessoa</option>
               {people.map((person) => (
                 <option key={person.id} value={person.id}>
                   {person.name}
@@ -107,38 +110,35 @@ class ExpensesComponent extends Component<Props, State> {
               ))}
             </Form.Select>
           </Col>
-          <Col lg="3">
+          <Col lg="7">
             <InputGroup>
-              <InputGroup.Text>R$</InputGroup.Text>
+              <InputGroup.Text>Início</InputGroup.Text>
               <FormControl
-                aria-label="Add Expense Value"
-                type="number"
-                placeholder="Valor"
-                onChange={this.updateValue}
+                aria-label="Date Range"
+                type="date"
+                placeholder="Datas de participação"
+                onChange={this.updateStartDate}
+              />
+              <InputGroup.Text>Fim</InputGroup.Text>
+              <FormControl
+                aria-label="Date Range"
+                type="date"
+                placeholder="Datas de participação"
+                onChange={this.updateEndDate}
               />
             </InputGroup>
-          </Col>
-          <Col lg="4">
-            <Form.Select onChange={this.updateDate}>
-              <option value="null">Selecione a Data</option>
-              {people.find((p) => p.id === personId)?.dates.map((d) => (
-                <option key={d.toString()} value={d.toString()}>
-                  {`${d.getUTCDate()}/${d.getUTCMonth()}/${d.getUTCFullYear()}`}
-                </option>
-              ))}
-            </Form.Select>
           </Col>
           <Col lg="1">
             <Button
               variant="outline-dark"
-              onClick={() => createExpenseRequest(this.handleDataRequest())}
+              onClick={() => editPersonRequest(this.handleDataRequest())}
             >
               Salvar
             </Button>
           </Col>
         </Row>
         <hr />
-        <ExpensesTableComponent />
+        <DatesTableComponent />
       </div>
     );
   }
@@ -146,9 +146,8 @@ class ExpensesComponent extends Component<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   people: state.people.data,
-  expenses: state.expenses.data,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators(Actions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ExpensesComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(DatesComponent);
