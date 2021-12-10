@@ -119,14 +119,11 @@ class ExpensesTableComponent extends Component<Props, State> {
                     <td>
                       <Form.Select onChange={this.updateEditingPersonId}>
                         <option value="null">Nova pessoa</option>
-                        {people
-                          .filter((p) => !expenses.some((e) => e.person.id === p.id)
-                            || expense.person.id === p.id)
-                          .map((person) => (
-                            <option key={person.id} value={person.id}>
-                              {person.name}
-                            </option>
-                          ))}
+                        {people.map((person) => (
+                          <option key={person.id} value={person.id}>
+                            {person.name}
+                          </option>
+                        ))}
                       </Form.Select>
                     </td>
                     <td>
@@ -144,6 +141,7 @@ class ExpensesTableComponent extends Component<Props, State> {
                       <Form.Select onChange={this.updateEditingDate}>
                         <option value="null">Nova Data</option>
                         {people.find((p) => p.id === editingPersonId)?.dates
+                          .sort((a, b) => a.getDate() - b.getDate())
                           .filter((d) => !expenses.find((e) => (
                             e.person.id === editingPersonId
                             && e.date.getDate() === d.getDate()

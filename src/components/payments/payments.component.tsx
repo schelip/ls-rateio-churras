@@ -14,6 +14,7 @@ import { Actions, ApplicationState } from '../../store';
 import '../../assets/style/table.css';
 import { Payment } from '../../models/payment.model';
 import PaymentsTable from './payments.table.component';
+import { PaymentsPayload } from '../../store/ducks/payments/payments.actions';
 
 interface StateProps {
     people: Person[];
@@ -27,7 +28,7 @@ interface State {
 }
 
 interface DispatchProps {
-  createPaymentRequest(data: { state: Payment[], data: Payment }): void;
+  createPaymentRequest(payload: PaymentsPayload): void;
   loadRequest(): void;
 }
 

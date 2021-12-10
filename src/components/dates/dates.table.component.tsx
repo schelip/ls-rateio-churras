@@ -21,7 +21,7 @@ interface State {
 }
 
 interface DispatchProps {
-  editPersonRequest(data: { state: Person[], data: Person }): void;
+  removeDatePersonRequest(data: { state: Person[], data: Person }): void;
   loadRequest(): void;
 }
 
@@ -66,16 +66,16 @@ class DatesTableComponent extends Component<Props, State> {
   }
 
   handleDelete(person: Person) {
-    const { people, editPersonRequest } = this.props;
+    const { people, removeDatePersonRequest } = this.props;
     const { date } = this.state;
-    const { dates } = person;
+    const dates = [...person.dates];
 
     const index = dates.findIndex((d) => d.getDate() === date?.getDate());
     if (index > -1) {
       dates.splice(index, 1);
     }
 
-    editPersonRequest({
+    removeDatePersonRequest({
       state: people,
       data: { ...person, dates },
     });

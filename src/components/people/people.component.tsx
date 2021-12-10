@@ -12,6 +12,7 @@ import { Person } from '../../models/person.model';
 import '../../assets/style/table.css';
 import { ApplicationState, Actions } from '../../store';
 import PeopleTableComponent from './people.table.component';
+import { PeoplePayload } from '../../store/ducks/people/people.actions';
 
 interface StateProps {
   people: Person[];
@@ -22,7 +23,7 @@ interface State {
 }
 
 interface DispatchProps {
-  createPersonRequest(data: { state: Person[]; data: Person }): void;
+  createPersonRequest(payload: PeoplePayload): void;
   loadRequest(): void;
 }
 

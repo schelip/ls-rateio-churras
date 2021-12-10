@@ -13,6 +13,7 @@ import { Person } from '../../models/person.model';
 import { Actions, ApplicationState } from '../../store';
 import '../../assets/style/table.css';
 import DatesTableComponent from './dates.table.component';
+import { PeoplePayload } from '../../store/ducks/people/people.actions';
 
 interface StateProps {
   people: Person[];
@@ -25,7 +26,7 @@ interface State {
 }
 
 interface DispatchProps {
-  editPersonRequest(data: { state: Person[], data: Person }): void;
+  addDatePersonRequest(payload: PeoplePayload): void;
   loadRequest(): void;
 }
 
@@ -91,7 +92,7 @@ class DatesComponent extends Component<Props, State> {
 
   render() {
     const {
-      people, editPersonRequest,
+      people, addDatePersonRequest,
     } = this.props;
     return (
       <div className="expense-component">
@@ -131,7 +132,7 @@ class DatesComponent extends Component<Props, State> {
           <Col lg="1">
             <Button
               variant="outline-dark"
-              onClick={() => editPersonRequest(this.handleDataRequest())}
+              onClick={() => addDatePersonRequest(this.handleDataRequest())}
             >
               Salvar
             </Button>

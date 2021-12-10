@@ -14,6 +14,7 @@ import { Expense } from '../../models/expense.model';
 import { Actions, ApplicationState } from '../../store';
 import '../../assets/style/table.css';
 import ExpensesTableComponent from './expenses.table.component';
+import { ExpensesPayload } from '../../store/ducks/expenses/expenses.actions';
 
 interface StateProps {
   people: Person[];
@@ -27,7 +28,7 @@ interface State {
 }
 
 interface DispatchProps {
-  createExpenseRequest(data: { state: Expense[], data: Expense }): void;
+  createExpenseRequest(payload: ExpensesPayload): void;
   loadRequest(): void;
 }
 
@@ -85,7 +86,7 @@ class ExpensesComponent extends Component<Props, State> {
 
   render() {
     const {
-      people, createExpenseRequest,
+      people, expenses, createExpenseRequest,
     } = this.props;
     const { personId } = this.state;
     return (
@@ -121,11 +122,15 @@ class ExpensesComponent extends Component<Props, State> {
           <Col lg="4">
             <Form.Select onChange={this.updateDate}>
               <option value="null">Selecione a Data</option>
-              {people.find((p) => p.id === personId)?.dates.map((d) => (
-                <option key={d.toString()} value={d.toString()}>
-                  {`${d.getUTCDate()}/${d.getUTCMonth()}/${d.getUTCFullYear()}`}
-                </option>
-              ))}
+              {people.find((p) => p.id === personId)?.dates
+                .filter((d) => !expenses.find((e) => e.person.id === personId
+                  && e.date.getDate() === d.getDate()))
+                .sort((a, b) => a.getDate() - b.getDate())
+                .map((d) => (
+                  <option key={d.toString()} value={d.toString()}>
+                    {`${d.getUTCDate()}/${d.getUTCMonth()}/${d.getUTCFullYear()}`}
+                  </option>
+                ))}
             </Form.Select>
           </Col>
           <Col lg="1">
