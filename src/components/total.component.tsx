@@ -4,9 +4,9 @@ import { Accordion, Table } from 'react-bootstrap';
 import { BsCheck2 } from 'react-icons/bs';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import Helpers from '../helpers/helpers';
 import { ReceivingEnum, Total } from '../models/total.model';
 import { Actions, ApplicationState } from '../store';
-import ValueComponent from './value.component';
 
 interface TotalStateProps {
   total: Total[]
@@ -29,7 +29,7 @@ class TotalComponent extends Component<TotalStateProps> {
                 O cálculo do rateio é feito da seguinte forma:
                 {' '}
                 <b>(soma dos gastos / número de pessoas) - valor pago por pessoa</b>
-                .
+                . O cálculo leva em conta apenas os dias em que a pessoa participou.
               </p>
               <p>
                 O Total será atualizado ao cadastrar os pagamentos na próxima aba.
@@ -44,7 +44,7 @@ class TotalComponent extends Component<TotalStateProps> {
             <tr>
               <th>Nome</th>
               <th>Valor do gasto</th>
-              <th>Valor total</th>
+              <th>Resultado</th>
               <th>Situação</th>
             </tr>
           </thead>
@@ -52,8 +52,8 @@ class TotalComponent extends Component<TotalStateProps> {
             {total.map((item) => (
               <tr key={item.id}>
                 <td>{item.person.name}</td>
-                <td><ValueComponent>{item.expenseValue}</ValueComponent></td>
-                <td><ValueComponent>{item.totalValue}</ValueComponent></td>
+                <td>{Helpers.formatValue(item.expensesValue)}</td>
+                <td>{Helpers.formatValue(item.totalValue)}</td>
                 <td>
                   {item.isReceiving === ReceivingEnum.equal ? (
                     <>
@@ -65,7 +65,7 @@ class TotalComponent extends Component<TotalStateProps> {
                     <>
                       {item.isReceiving}
                       {' '}
-                      <ValueComponent>{item.remainingValue}</ValueComponent>
+                      {Helpers.formatValue(item.remainingValue)}
                     </>
                   )}
                   {' '}

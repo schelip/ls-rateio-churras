@@ -2,25 +2,90 @@ import { Expense } from '../models/expense.model';
 import { Person } from '../models/person.model';
 import { Summary } from '../models/summary.model';
 
-function updateSummary(summary: Summary, people: Person[], expenses: Expense[]): Summary {
-  const peopleCount = people.length;
-  const expensesTotal = expenses.reduce((a, s) => a + s.value, 0);
-  const expensesPerPerson = peopleCount !== 0 ? (expensesTotal / peopleCount) : 0;
+function getProps(date: Date, people: Person[], expenses: Expense[]) {
+  const filteredPeople = people.filter((p) => p.dates.find((d) => d.getTime() === date.getTime()));
 
-  const peopleReceiving = expenses.map((s) => s.person).filter((p) => {
-    const expense = expenses.find((s) => s.person.id === p.id);
-    if (!expense) {
-      return false;
-    }
+  const peopleCount = filteredPeople.length;
 
-    return expense.value > expensesPerPerson;
+  const filteredExpenses = expenses.filter(
+    (e) => e.date.getTime() === date.getTime(),
+  );
+
+  const expensesTotal = filteredExpenses.reduce((a, s) => a + s.value, 0);
+
+  const expensesPerPerson = expensesTotal / peopleCount || 0;
+
+  const peopleReceiving = filteredPeople.filter((p) => {
+    const expense = filteredExpenses.find((e) => e.person.id === p.id);
+    return expense && expense.value > expensesPerPerson;
   });
 
   return {
-    ...summary, peopleCount, expensesTotal, expensesPerPerson, peopleReceiving,
+    peopleCount, peopleReceiving, expensesTotal, expensesPerPerson,
   };
 }
 
-export {
-  updateSummary,
-};
+export function updateSummaries(
+  summaries: Summary[], people: Person[], expenses: Expense[],
+): Summary[] {
+  const peopleCount = people.length;
+  const expensesTotal = expenses.reduce((a, s) => a + s.value, 0);
+  const expensesPerPerson = expensesTotal / peopleCount || 0;
+  const peopleReceiving = people.filter((p) => {
+    const expense = expenses.find((e) => e.person.id === p.id);
+    return expense && expense.value > expensesPerPerson;
+  });
+
+  const updatedSummaries = summaries;
+  updatedSummaries[0] = {
+    ...summaries[0], peopleCount, expensesTotal, expensesPerPerson, peopleReceiving,
+  };
+
+  summaries.slice(1).forEach((s) => {
+    if (!people.find((p) => p.dates.find((d) => d.getTime() === s.date.getTime()))) {
+      summaries.splice(summaries.indexOf(s), 1);
+    }
+  });
+
+  return updatedSummaries;
+}
+
+export function createSummary(
+  summaries: Summary[], date: Date, people: Person[], expenses: Expense[],
+): Summary[] {
+  const {
+    peopleCount, peopleReceiving, expensesTotal, expensesPerPerson,
+  } = getProps(date, people, expenses);
+
+  const updatedSummaries = summaries;
+  updatedSummaries.push(
+    new Summary(peopleCount, peopleReceiving, expensesTotal, expensesPerPerson, date),
+  );
+  const sorted = updatedSummaries.slice(1).sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  for (let i = 1; i < updatedSummaries.length; i += 1) {
+    updatedSummaries[i] = sorted[i - 1];
+  }
+
+  return updatedSummaries;
+}
+
+export function editSummary(
+  summaries: Summary[], date: Date, people: Person[], expenses: Expense[],
+): Summary[] {
+  const {
+    peopleCount, peopleReceiving, expensesTotal, expensesPerPerson,
+  } = getProps(date, people, expenses);
+
+  const updatedSummaries = summaries;
+  const index = updatedSummaries.slice(1).findIndex((s) => s.date.getTime() === date.getTime()) + 1;
+  updatedSummaries[index] = {
+    ...updatedSummaries[index],
+    peopleCount,
+    peopleReceiving,
+    expensesTotal,
+    expensesPerPerson,
+  };
+
+  return updatedSummaries;
+}

@@ -18,10 +18,7 @@ function expenseReduce(
   switch (action.type) {
     case ExpenseTypes.EXPENSE_CREATE_REQUEST:
       if (action.payload.data) {
-        const existingExpense = data.find((e) => e.person === action.payload.data.person);
-        if (existingExpense) {
-          existingExpense.value = action.payload.data.value;
-        } else data.push(action.payload.data);
+        data.push(action.payload.data);
       }
 
       return {

@@ -4,6 +4,7 @@ import PeopleComponent from './people/people.component';
 import ExpensesComponent from './expenses/expenses.component';
 import PaymentsComponent from './payments/payments.component';
 import TotalComponent from './total.component';
+import DatesComponent from './dates/dates.component';
 
 function TabComponent(): JSX.Element {
   return (
@@ -14,6 +15,9 @@ function TabComponent(): JSX.Element {
     >
       <Tab eventKey="people" title="Pessoas">
         <PeopleComponent />
+      </Tab>
+      <Tab eventKey="dates" title="Datas">
+        <DatesComponent />
       </Tab>
       <Tab eventKey="expenses" title="Gastos">
         <ExpensesComponent />

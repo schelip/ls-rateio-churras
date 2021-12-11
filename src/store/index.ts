@@ -13,7 +13,7 @@ export interface ApplicationState {
     people: BaseStates<Person>;
     expenses: BaseStates<Expense>;
     total: BaseStates<Total>;
-    summary: BaseStates<Summary>;
+    summaries: BaseStates<Summary>;
     payments: BaseStates<Payment>
 }
 

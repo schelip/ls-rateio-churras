@@ -14,6 +14,8 @@ import { Expense } from '../../models/expense.model';
 import { Actions, ApplicationState } from '../../store';
 import '../../assets/style/table.css';
 import ExpensesTableComponent from './expenses.table.component';
+import { ExpensesPayload } from '../../store/ducks/expenses/expenses.actions';
+import Helpers from '../../helpers/helpers';
 
 interface StateProps {
   people: Person[];
@@ -22,11 +24,12 @@ interface StateProps {
 
 interface State {
   value: number;
+  date: Date;
   personId: string;
 }
 
 interface DispatchProps {
-  createExpenseRequest(data: { state: Expense[], data: Expense }): void;
+  createExpenseRequest(payload: ExpensesPayload): void;
   loadRequest(): void;
 }
 
@@ -39,10 +42,12 @@ class ExpensesComponent extends Component<Props, State> {
     this.state = {
       value: 0,
       personId: '',
+      date: new Date(),
     };
 
     this.updateValue = this.updateValue.bind(this);
     this.updatePerson = this.updatePerson.bind(this);
+    this.updateDate = this.updateDate.bind(this);
   }
 
   componentDidMount() {
@@ -53,19 +58,23 @@ class ExpensesComponent extends Component<Props, State> {
 
   handleDataRequest() {
     const { people } = this.props;
-    const { personId, value } = this.state;
+    const { personId, value, date } = this.state;
 
     const person = people.find((p) => p.id === personId);
 
-    if (!person) {
+    if (!person || !person.dates.find((d) => d.getTime() === date.getTime())) {
       throw Error();
     }
 
     const { expenses } = this.props;
     return {
       state: expenses,
-      data: new Expense(person, value),
+      data: new Expense(person, value, date),
     };
+  }
+
+  updateDate(event: React.ChangeEvent<HTMLSelectElement>) {
+    this.setState({ date: new Date(event.target.value) });
   }
 
   updateValue(event: React.ChangeEvent<HTMLInputElement>) {
@@ -78,18 +87,29 @@ class ExpensesComponent extends Component<Props, State> {
 
   render() {
     const {
-      people, createExpenseRequest,
+      people, expenses, createExpenseRequest,
     } = this.props;
+    const { personId } = this.state;
     return (
       <div className="expense-component">
         <h3>Gastos</h3>
         <p>
-          Cadastre os valores que foram gastos no rolê
-          e quem pagou.
+          Cadastre os valores que foram gastos em cada dia
+          do rolê e quem pagou.
         </p>
 
         <Row className="justify-content-md-center">
-          <Col lg="4">
+          <Col lg="3">
+            <Form.Select onChange={this.updatePerson}>
+              <option value="null">Quem pagou</option>
+              {people.map((person) => (
+                <option key={person.id} value={person.id}>
+                  {person.name}
+                </option>
+              ))}
+            </Form.Select>
+          </Col>
+          <Col lg="3">
             <InputGroup>
               <InputGroup.Text>R$</InputGroup.Text>
               <FormControl
@@ -100,14 +120,18 @@ class ExpensesComponent extends Component<Props, State> {
               />
             </InputGroup>
           </Col>
-          <Col lg="5">
-            <Form.Select onChange={this.updatePerson}>
-              <option value="null">Quem pagou</option>
-              {people.map((person) => (
-                <option key={person.id} value={person.id}>
-                  {person.name}
-                </option>
-              ))}
+          <Col lg="4">
+            <Form.Select onChange={this.updateDate}>
+              <option value="null">Selecione a Data</option>
+              {people.find((p) => p.id === personId)?.dates
+                .filter((d) => !expenses.find((e) => e.person.id === personId
+                  && e.date.getTime() === d.getTime()))
+                .sort((a, b) => a.getTime() - b.getTime())
+                .map((d) => (
+                  <option key={d.toString()} value={d.toString()}>
+                    {Helpers.formatDate(d)}
+                  </option>
+                ))}
             </Form.Select>
           </Col>
           <Col lg="1">

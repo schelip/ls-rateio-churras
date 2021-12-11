@@ -9,6 +9,6 @@ export default combineReducers({
   people: peopleReducer,
   expenses: expenseReducer,
   total: totalReducer,
-  summary: summaryReducer,
+  summaries: summaryReducer,
   payments: paymentReducer,
 });

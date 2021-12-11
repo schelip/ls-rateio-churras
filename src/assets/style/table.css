@@ -1,5 +1,13 @@
 th.actions-col {
-    width: 15%;
+    width: 20%;
+}
+
+th.filter-col {
+    width: 25%;
+}
+
+th.filter-col select {
+    padding: 0 8px;
 }
 
 td.actions-col button {

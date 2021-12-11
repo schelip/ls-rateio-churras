@@ -13,6 +13,7 @@ const SUMMARY_INITIAL_STATE : BaseStates<Summary> = {
       peopleReceiving: [],
       expensesTotal: 0,
       expensesPerPerson: 0,
+      date: new Date(),
     },
   ],
   loading: false,
@@ -22,9 +23,27 @@ const SUMMARY_INITIAL_STATE : BaseStates<Summary> = {
 function summaryReduce(state: BaseStates<Summary> = SUMMARY_INITIAL_STATE, action: any): any {
   const data = [...state.data];
   switch (action.type) {
-    case SummaryTypes.SUMMARY_UPDATE_REQUEST:
-      data[0] = SummaryService.updateSummary(
-        data[0], action.payload.people.data, action.payload.expenses.data,
+    case SummaryTypes.SUMMARY_CREATE_REQUEST:
+      SummaryService.createSummary(
+        data, action.payload.date, action.payload.people, action.payload.expenses,
+      );
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
+    case SummaryTypes.SUMMARY_EDIT_REQUEST:
+      SummaryService.editSummary(
+        data, action.payload.date, action.payload.people, action.payload.expenses,
+      );
+
+      return {
+        ...state, data, loading: true, error: false,
+      };
+
+    case SummaryTypes.SUMMARIES_UPDATE_REQUEST:
+      SummaryService.updateSummaries(
+        data, action.payload.people, action.payload.expenses,
       );
 
       return {

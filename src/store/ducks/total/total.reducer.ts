@@ -17,9 +17,9 @@ function totalReduce(state: BaseStates<Total> = TOTAL_INITIAL_STATE, action: any
     case TotalTypes.TOTAL_UPDATE_REQUEST:
       TotalService.updateTotal(
         data,
-        action.payload.people.data,
-        action.payload.expenses.data,
-        action.payload.payments.data,
+        action.payload.people,
+        action.payload.expenses,
+        action.payload.payments,
       );
 
       return {
