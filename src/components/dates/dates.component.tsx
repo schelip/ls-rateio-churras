@@ -80,11 +80,17 @@ class DatesComponent extends Component<Props, State> {
   }
 
   updateStartDate(startDate?: Date | null) {
-    if (startDate) this.setState({ startDate });
+    if (startDate) {
+      startDate.setHours(0, 0, 0, 0);
+      this.setState({ startDate });
+    }
   }
 
   updateEndDate(endDate?: Date | null) {
-    if (endDate) this.setState({ endDate });
+    if (endDate) {
+      endDate.setHours(0, 0, 0, 0);
+      this.setState({ endDate });
+    }
   }
 
   updatePerson(event: React.ChangeEvent<HTMLSelectElement>) {
