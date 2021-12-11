@@ -114,22 +114,6 @@ class DatesComponent extends Component<Props, State> {
           </Col>
           <Localization date={new DateLocalizer({ culture: 'pt-BR', firstOfWeek: 0 })}>
             <Col lg="4">
-              {/* <InputGroup>
-              <InputGroup.Text>Início</InputGroup.Text>
-              <FormControl
-                aria-label="Date Range"
-                type="date"
-                placeholder="Datas de participação"
-                onChange={this.updateStartDate}
-              />
-              <InputGroup.Text>Fim</InputGroup.Text>
-              <FormControl
-                aria-label="Date Range"
-                type="date"
-                placeholder="Datas de participação"
-                onChange={this.updateEndDate}
-              />
-            </InputGroup> */}
               <DatePicker placeholder="Data inicial" onChange={this.updateStartDate} />
               <DatePicker placeholder="Data final" onChange={this.updateEndDate} />
             </Col>
