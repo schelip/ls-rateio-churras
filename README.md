@@ -4,7 +4,10 @@
 
 O objetivo deste projeto é trazer uma experiência de contribuição em um projeto real que utiliza a linguagem **Typescript** para os alunos do Bootcamp de **Take Blip Fullstack Developer #2** que foi disponibilizado pela [Take Blip](https://github.com/takenet). 
 
-Com o intuito de levar conhecimento de qualidade a comunidade, o Bootcamp disponibilizou 130 mil bolsas, além de fornecer palestras/mentorias com profissionais da Take Blip.
+Foi realizada uma refatoração geral e foram adicionadas as features propostas nos slides finais da apresentação:
+- Opções de edição/remoção de dados;
+- Cadastro de pagamentos e atualização do status no total do rateio; e
+- Cadastro das datas de participação dos participantes e reformulação adequada do cálculo total
 
 ## Rodando o projeto
 
@@ -41,6 +44,3 @@ O projeto foi desenvolvido em React utilizando o Typescript como linguagem de de
 Contribuições são bem vindas. Todos podem clonar e utilizar esse projeto de forma não comercial. 
 
 Em caso de utilização os créditos são bem vindos!
-## Aprenda mais
-
-Você pode aprender mais lendo a documentação [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started) e [React documentation](https://reactjs.org/).
