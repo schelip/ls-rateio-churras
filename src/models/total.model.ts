@@ -10,7 +10,7 @@ export enum ReceivingEnum {
 export class Total extends BaseModel {
     person: Person;
 
-    expenseValue: number;
+    expensesValue: number;
 
     totalValue: number;
 
@@ -20,14 +20,14 @@ export class Total extends BaseModel {
 
     constructor(
       person: Person,
-      expenseValue: number,
+      expensesValue: number,
       totalValue: number,
       remainingValue: number,
       isReceiving: ReceivingEnum,
     ) {
       super();
       this.person = person;
-      this.expenseValue = expenseValue;
+      this.expensesValue = expensesValue;
       this.totalValue = totalValue;
       this.remainingValue = remainingValue;
       this.isReceiving = isReceiving;

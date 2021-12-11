@@ -29,7 +29,7 @@ class TotalComponent extends Component<TotalStateProps> {
                 O cálculo do rateio é feito da seguinte forma:
                 {' '}
                 <b>(soma dos gastos / número de pessoas) - valor pago por pessoa</b>
-                .
+                . O cálculo leva em conta apenas os dias em que a pessoa participou.
               </p>
               <p>
                 O Total será atualizado ao cadastrar os pagamentos na próxima aba.
@@ -44,7 +44,7 @@ class TotalComponent extends Component<TotalStateProps> {
             <tr>
               <th>Nome</th>
               <th>Valor do gasto</th>
-              <th>Valor total</th>
+              <th>Resultado</th>
               <th>Situação</th>
             </tr>
           </thead>
@@ -52,7 +52,7 @@ class TotalComponent extends Component<TotalStateProps> {
             {total.map((item) => (
               <tr key={item.id}>
                 <td>{item.person.name}</td>
-                <td><ValueComponent>{item.expenseValue}</ValueComponent></td>
+                <td><ValueComponent>{item.expensesValue}</ValueComponent></td>
                 <td><ValueComponent>{item.totalValue}</ValueComponent></td>
                 <td>
                   {item.isReceiving === ReceivingEnum.equal ? (

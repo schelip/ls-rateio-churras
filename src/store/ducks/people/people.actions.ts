@@ -94,6 +94,7 @@ export const addDatePersonRequest = (payload: PeoplePayload) => (dispatch: any, 
   person.dates.forEach((date: Date) => {
     updateSummaryRequest(date)(dispatch, getState);
   });
+  updateTotalRequest()(dispatch, getState);
 };
 
 export const removeDatePersonRequest = (payload: PeoplePayload) => (
@@ -120,4 +121,5 @@ export const removeDatePersonRequest = (payload: PeoplePayload) => (
       updateSummaryRequest(date)(dispatch, getState);
     });
   }
+  updateTotalRequest()(dispatch, getState);
 };
