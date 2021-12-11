@@ -7,7 +7,7 @@ import { Person } from '../../../models/person.model';
 import { ExpenseTypes } from '../expenses/expenses.types';
 import { PaymentTypes } from '../payments/payments.types';
 import { updateSummariesRequest, updateSummaryRequest } from '../summary/summary.actions';
-import { updateTotalRequest } from '../total/total.actions';
+import { createTotalRequest, removeTotalRequest, updateTotalStateRequest } from '../total/total.actions';
 import { PersonTypes } from './people.types';
 
 export type PeoplePayload = {state: Person[], data: Person}
@@ -15,7 +15,7 @@ export type PeoplePayload = {state: Person[], data: Person}
 export const createPersonRequest = (payload: PeoplePayload) => (dispatch: any, getState: any) => {
   dispatch(action(PersonTypes.PERSON_CREATE_REQUEST, payload));
   updateSummariesRequest()(dispatch, getState);
-  updateTotalRequest()(dispatch, getState);
+  createTotalRequest(payload.data)(dispatch, getState);
 };
 
 export const editPersonRequest = (payload: PeoplePayload) => (dispatch: any, getState: any) => {
@@ -51,7 +51,7 @@ export const editPersonRequest = (payload: PeoplePayload) => (dispatch: any, get
     updateSummaryRequest(date)(dispatch, getState);
   });
 
-  updateTotalRequest()(dispatch, getState);
+  updateTotalStateRequest()(dispatch, getState);
 };
 
 export const removePersonRequest = (payload: any) => (dispatch: any, getState: any) => {
@@ -84,7 +84,7 @@ export const removePersonRequest = (payload: any) => (dispatch: any, getState: a
   person.dates.forEach((date: Date) => {
     updateSummaryRequest(date)(dispatch, getState);
   });
-  updateTotalRequest()(dispatch, getState);
+  removeTotalRequest(person)(dispatch, getState);
 };
 
 export const addDatePersonRequest = (payload: PeoplePayload) => (dispatch: any, getState: any) => {
@@ -94,7 +94,7 @@ export const addDatePersonRequest = (payload: PeoplePayload) => (dispatch: any, 
   person.dates.forEach((date: Date) => {
     updateSummaryRequest(date)(dispatch, getState);
   });
-  updateTotalRequest()(dispatch, getState);
+  updateTotalStateRequest()(dispatch, getState);
 };
 
 export const removeDatePersonRequest = (payload: PeoplePayload) => (
@@ -121,5 +121,5 @@ export const removeDatePersonRequest = (payload: PeoplePayload) => (
       updateSummaryRequest(date)(dispatch, getState);
     });
   }
-  updateTotalRequest()(dispatch, getState);
+  updateTotalStateRequest()(dispatch, getState);
 };

@@ -3,7 +3,7 @@
 import { action } from 'typesafe-actions';
 import { Expense } from '../../../models/expense.model';
 import { updateSummaryRequest } from '../summary/summary.actions';
-import { updateTotalRequest } from '../total/total.actions';
+import { updateTotalStateRequest } from '../total/total.actions';
 import { ExpenseTypes } from './expenses.types';
 
 export type ExpensesPayload = {state: Expense[], data: Expense};
@@ -13,7 +13,7 @@ export const createExpenseRequest = (payload: ExpensesPayload) => (
 ) => {
   dispatch(action(ExpenseTypes.EXPENSE_CREATE_REQUEST, payload));
   updateSummaryRequest(payload.data.date)(dispatch, getState);
-  updateTotalRequest()(dispatch, getState);
+  updateTotalStateRequest()(dispatch, getState);
 };
 export const editExpenseRequest = (payload: ExpensesPayload) => (
   dispatch: any, getState: any,
@@ -22,7 +22,7 @@ export const editExpenseRequest = (payload: ExpensesPayload) => (
   const date = payload.state.find((e) => e.id === payload.data.id)?.date;
   if (date) updateSummaryRequest(date)(dispatch, getState);
   updateSummaryRequest(payload.data.date)(dispatch, getState);
-  updateTotalRequest()(dispatch, getState);
+  updateTotalStateRequest()(dispatch, getState);
 };
 
 export const removeExpenseRequest = (payload: ExpensesPayload) => (
@@ -30,5 +30,5 @@ export const removeExpenseRequest = (payload: ExpensesPayload) => (
 ) => {
   dispatch(action(ExpenseTypes.EXPENSE_REMOVE_REQUEST, payload));
   updateSummaryRequest(payload.data.date)(dispatch, getState);
-  updateTotalRequest()(dispatch, getState);
+  updateTotalStateRequest()(dispatch, getState);
 };

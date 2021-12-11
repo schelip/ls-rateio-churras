@@ -24,47 +24,57 @@ function calcTotalValue(
     .reduce((a, s) => a + s.value, 0);
   totalValue += expensesValue;
 
-  let remaining = totalValue;
+  let remainingValue = totalValue;
   payments.forEach((payment) => {
-    if (payment.personPaying.id === person.id) remaining += payment.value;
-    if (payment.personReceiving.id === person.id) remaining -= payment.value;
+    if (payment.personPaying.id === person.id) remainingValue += payment.value;
+    if (payment.personReceiving.id === person.id) remainingValue -= payment.value;
   });
 
   let isReceiving;
-  if (remaining === 0) {
+  if (remainingValue === 0) {
     isReceiving = ReceivingEnum.equal;
-  } else if (remaining > 0) {
+  } else if (remainingValue > 0) {
     isReceiving = ReceivingEnum.yes;
   } else isReceiving = ReceivingEnum.no;
 
   return {
-    expensesValue, totalValue, remaining, isReceiving,
+    expensesValue, totalValue, remainingValue, isReceiving,
   };
 }
 
-function updateTotal(
+function createTotal(totalState: Total[], person: Person): Total[] {
+  totalState.push(new Total(person, 0, 0, 0, ReceivingEnum.equal));
+  return totalState;
+}
+
+function removeTotal(totalState: Total[], person: Person): Total[] {
+  const index = totalState.findIndex((t) => t.person.id === person.id);
+  if (index > -1) totalState.splice(index, 1);
+  return totalState;
+}
+
+function updateTotalState(
   totalState: Total[], people: Person[], expenses: Expense[], payments: Payment[],
 ): Total[] {
-  const updatedTotalState = totalState;
-  updatedTotalState.length = 0;
-
   people.forEach((person) => {
     const {
-      expensesValue, totalValue, remaining, isReceiving,
+      expensesValue, totalValue, remainingValue, isReceiving,
     } = calcTotalValue(person, people, expenses, payments);
 
-    updatedTotalState.push(new Total(
+    const index = totalState.findIndex((t) => t.person.id === person.id);
+    totalState[index] = {
+      ...totalState[index],
       person,
       expensesValue,
       totalValue,
-      remaining,
+      remainingValue,
       isReceiving,
-    ));
+    };
   });
 
-  return updatedTotalState;
+  return totalState;
 }
 
 export {
-  updateTotal,
+  createTotal, removeTotal, updateTotalState,
 };

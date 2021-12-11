@@ -117,7 +117,7 @@ class DatesTableComponent extends Component<Props, State> {
           && (
           <>
             {people
-              .filter((p) => p.dates.find((d) => d.getDate() === date.getDate()))
+              .filter((p) => p.dates.find((d) => d.getTime() === date.getTime()))
               .map((person) => (
                 <tr key={person.id}>
                   <td>{person.name}</td>
