@@ -14,7 +14,7 @@ export const updateSummariesRequest = () => (dispatch: any, getState: any) => {
 export const updateSummaryRequest = (date: Date) => (dispatch: any, getState: any) => {
   const { people, expenses, summaries } = getState();
   const summary = summaries.data.slice(1).find((s: Summary) => s.date && date
-      && s.date.getDate() === date.getDate());
+      && s.date.getTime() === date.getTime());
 
   if (!summary && date) {
     dispatch(action(SummaryTypes.SUMMARY_CREATE_REQUEST, {

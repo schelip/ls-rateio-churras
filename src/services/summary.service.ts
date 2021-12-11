@@ -3,12 +3,12 @@ import { Person } from '../models/person.model';
 import { Summary } from '../models/summary.model';
 
 function getProps(date: Date, people: Person[], expenses: Expense[]) {
-  const filteredPeople = people.filter((p) => p.dates.find((d) => d.getDate() === date.getDate()));
+  const filteredPeople = people.filter((p) => p.dates.find((d) => d.getTime() === date.getTime()));
 
   const peopleCount = filteredPeople.length;
 
   const filteredExpenses = expenses.filter(
-    (e) => e.date.getDate() === date.getDate(),
+    (e) => e.date.getTime() === date.getTime(),
   );
 
   const expensesTotal = filteredExpenses.reduce((a, s) => a + s.value, 0);
@@ -42,7 +42,7 @@ export function updateSummaries(
   };
 
   summaries.slice(1).forEach((s) => {
-    if (!people.find((p) => p.dates.find((d) => d.getDate() === s.date.getDate()))) {
+    if (!people.find((p) => p.dates.find((d) => d.getTime() === s.date.getTime()))) {
       summaries.splice(summaries.indexOf(s), 1);
     }
   });
@@ -61,7 +61,7 @@ export function createSummary(
   updatedSummaries.push(
     new Summary(peopleCount, peopleReceiving, expensesTotal, expensesPerPerson, date),
   );
-  const sorted = updatedSummaries.slice(1).sort((a, b) => a.date.getDate() - b.date.getDate());
+  const sorted = updatedSummaries.slice(1).sort((a, b) => a.date.getTime() - b.date.getTime());
 
   for (let i = 1; i < updatedSummaries.length; i += 1) {
     updatedSummaries[i] = sorted[i - 1];
@@ -78,7 +78,7 @@ export function editSummary(
   } = getProps(date, people, expenses);
 
   const updatedSummaries = summaries;
-  const index = updatedSummaries.slice(1).findIndex((s) => s.date.getDate() === date.getDate()) + 1;
+  const index = updatedSummaries.slice(1).findIndex((s) => s.date.getTime() === date.getTime()) + 1;
   updatedSummaries[index] = {
     ...updatedSummaries[index],
     peopleCount,

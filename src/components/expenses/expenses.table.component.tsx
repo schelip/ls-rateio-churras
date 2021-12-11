@@ -14,8 +14,8 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Person } from '../../models/person.model';
 import { Expense } from '../../models/expense.model';
 import { Actions, ApplicationState } from '../../store';
-import ValueComponent from '../value.component';
 import '../../assets/style/table.css';
+import Helpers from '../../helpers/helpers';
 
 interface StateProps {
   people: Person[];
@@ -141,14 +141,14 @@ class ExpensesTableComponent extends Component<Props, State> {
                       <Form.Select onChange={this.updateEditingDate}>
                         <option value="null">Nova Data</option>
                         {people.find((p) => p.id === editingPersonId)?.dates
-                          .sort((a, b) => a.getDate() - b.getDate())
+                          .sort((a, b) => a.getTime() - b.getTime())
                           .filter((d) => !expenses.find((e) => (
                             e.person.id === editingPersonId
-                            && e.date.getDate() === d.getDate()
-                            && expense.date.getDate() !== e.date.getDate())))
+                            && e.date.getTime() === d.getTime()
+                            && expense.date.getTime() !== e.date.getTime())))
                           .map((d) => (
                             <option key={d.toString()} value={d.toString()}>
-                              {`${d.getUTCDate()}/${d.getUTCMonth()}/${d.getUTCFullYear()}`}
+                              {Helpers.formatDate(d)}
                             </option>
                           ))}
                       </Form.Select>
@@ -172,8 +172,8 @@ class ExpensesTableComponent extends Component<Props, State> {
                 : (
                   <>
                     <td>{expense.person.name}</td>
-                    <td><ValueComponent>{expense.value}</ValueComponent></td>
-                    <td>{`${expense.date.getUTCDate()}/${expense.date.getUTCMonth()}/${expense.date.getUTCFullYear()}`}</td>
+                    <td>{Helpers.formatValue(expense.value)}</td>
+                    <td>{Helpers.formatDate(expense.date)}</td>
                     <td className="actions-col">
                       <Button variant="light" onClick={() => this.updateEditingExpense(expense)}>
                         <BsPencil />

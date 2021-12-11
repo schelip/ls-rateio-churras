@@ -107,7 +107,7 @@ export const removeDatePersonRequest = (payload: PeoplePayload) => (
   const oldPerson = { ...payload.state.find((p) => p.id === person.id) };
   const personExpenses = expenses.data.filter((e: Expense) => e.person.id === person.id);
   personExpenses.forEach((expense: Expense) => {
-    if (!person.dates.find((d: Date) => d.getDate() === expense.date.getDate())) {
+    if (!person.dates.find((d: Date) => d.getTime() === expense.date.getTime())) {
       dispatch(
         action(ExpenseTypes.EXPENSE_REMOVE_REQUEST, {
           state: expenses.data,

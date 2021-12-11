@@ -15,6 +15,7 @@ import { Actions, ApplicationState } from '../../store';
 import '../../assets/style/table.css';
 import ExpensesTableComponent from './expenses.table.component';
 import { ExpensesPayload } from '../../store/ducks/expenses/expenses.actions';
+import Helpers from '../../helpers/helpers';
 
 interface StateProps {
   people: Person[];
@@ -61,7 +62,7 @@ class ExpensesComponent extends Component<Props, State> {
 
     const person = people.find((p) => p.id === personId);
 
-    if (!person || !person.dates.find((d) => d.getDate() === date.getDate())) {
+    if (!person || !person.dates.find((d) => d.getTime() === date.getTime())) {
       throw Error();
     }
 
@@ -124,11 +125,11 @@ class ExpensesComponent extends Component<Props, State> {
               <option value="null">Selecione a Data</option>
               {people.find((p) => p.id === personId)?.dates
                 .filter((d) => !expenses.find((e) => e.person.id === personId
-                  && e.date.getDate() === d.getDate()))
-                .sort((a, b) => a.getDate() - b.getDate())
+                  && e.date.getTime() === d.getTime()))
+                .sort((a, b) => a.getTime() - b.getTime())
                 .map((d) => (
                   <option key={d.toString()} value={d.toString()}>
-                    {`${d.getUTCDate()}/${d.getUTCMonth()}/${d.getUTCFullYear()}`}
+                    {Helpers.formatDate(d)}
                   </option>
                 ))}
             </Form.Select>

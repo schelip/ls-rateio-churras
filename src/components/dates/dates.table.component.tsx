@@ -10,6 +10,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Person } from '../../models/person.model';
 import { Actions, ApplicationState } from '../../store';
 import '../../assets/style/table.css';
+import Helpers from '../../helpers/helpers';
 
 interface StateProps {
   people: Person[];
@@ -52,15 +53,15 @@ class DatesTableComponent extends Component<Props, State> {
       let currDateHasPeople = false;
       people.forEach((p) => {
         p.dates.forEach((personDate) => {
-          if (!dates.find((stateDate) => stateDate.getDate() === personDate.getDate())) {
+          if (!dates.find((stateDate) => stateDate.getTime() === personDate.getTime())) {
             dates.push(personDate);
           }
-          if (personDate.getDate() === date?.getDate()) {
+          if (personDate.getTime() === date?.getTime()) {
             currDateHasPeople = true;
           }
         });
       });
-      dates.sort((a, b) => a.getDate() - b.getDate());
+      dates.sort((a, b) => a.getTime() - b.getTime());
       this.updateDates(dates, date && currDateHasPeople ? date : dates[0]);
     }
   }
@@ -70,7 +71,7 @@ class DatesTableComponent extends Component<Props, State> {
     const { date } = this.state;
     const dates = [...person.dates];
 
-    const index = dates.findIndex((d) => d.getDate() === date?.getDate());
+    const index = dates.findIndex((d) => d.getTime() === date?.getTime());
     if (index > -1) {
       dates.splice(index, 1);
     }
@@ -101,8 +102,8 @@ class DatesTableComponent extends Component<Props, State> {
               {date && (
               <Form.Select onChange={this.updateDate}>
                 {dates.map((d) => (
-                  <option key={d.getDate()} value={d.toString()}>
-                    {`${d.getUTCDate()}/${d.getUTCMonth()}/${d.getUTCFullYear()}`}
+                  <option key={d.getTime()} value={d.toString()}>
+                    {Helpers.formatDate(d)}
                   </option>
                 ))}
               </Form.Select>

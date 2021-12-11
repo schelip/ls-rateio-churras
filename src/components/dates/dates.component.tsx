@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import {
   Button,
   Form,
-  FormControl,
-  InputGroup,
   Row,
   Col,
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { DatePicker, Localization } from 'react-widgets/cjs';
+import { DateLocalizer } from 'react-widgets/IntlLocalizer';
 import { Person } from '../../models/person.model';
 import { Actions, ApplicationState } from '../../store';
 import '../../assets/style/table.css';
 import DatesTableComponent from './dates.table.component';
 import { PeoplePayload } from '../../store/ducks/people/people.actions';
+import 'react-widgets/styles.css';
 
 interface StateProps {
   people: Person[];
@@ -66,8 +67,8 @@ class DatesComponent extends Component<Props, State> {
     const { dates } = person;
     const date = new Date(startDate);
 
-    while (date.getDate() <= endDate.getDate()) {
-      if (!dates.find((d) => d.getDate() === date.getDate())) dates.push(new Date(date));
+    while (date.getTime() <= endDate.getTime()) {
+      if (!dates.find((d) => d.getTime() === date.getTime())) dates.push(new Date(date));
       date.setDate(date.getDate() + 1);
     }
     dates.sort();
@@ -78,12 +79,12 @@ class DatesComponent extends Component<Props, State> {
     };
   }
 
-  updateStartDate(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ startDate: new Date(event.target.value) });
+  updateStartDate(startDate?: Date | null) {
+    if (startDate) this.setState({ startDate });
   }
 
-  updateEndDate(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ endDate: new Date(event.target.value) });
+  updateEndDate(endDate?: Date | null) {
+    if (endDate) this.setState({ endDate });
   }
 
   updatePerson(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -111,8 +112,9 @@ class DatesComponent extends Component<Props, State> {
               ))}
             </Form.Select>
           </Col>
-          <Col lg="7">
-            <InputGroup>
+          <Localization date={new DateLocalizer({ culture: 'pt-BR', firstOfWeek: 0 })}>
+            <Col lg="4">
+              {/* <InputGroup>
               <InputGroup.Text>Início</InputGroup.Text>
               <FormControl
                 aria-label="Date Range"
@@ -127,8 +129,11 @@ class DatesComponent extends Component<Props, State> {
                 placeholder="Datas de participação"
                 onChange={this.updateEndDate}
               />
-            </InputGroup>
-          </Col>
+            </InputGroup> */}
+              <DatePicker placeholder="Data inicial" onChange={this.updateStartDate} />
+              <DatePicker placeholder="Data final" onChange={this.updateEndDate} />
+            </Col>
+          </Localization>
           <Col lg="1">
             <Button
               variant="outline-dark"

@@ -13,9 +13,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Person } from '../../models/person.model';
 import { Actions, ApplicationState } from '../../store';
-import ValueComponent from '../value.component';
 import '../../assets/style/table.css';
 import { Payment } from '../../models/payment.model';
+import Helpers from '../../helpers/helpers';
 
 interface StateProps {
   people: Person[];
@@ -179,7 +179,7 @@ class PaymentsTableComponent extends Component<Props, State> {
                 : (
                   <>
                     <td>{payment.personPaying.name}</td>
-                    <td><ValueComponent>{payment.value}</ValueComponent></td>
+                    <td>{Helpers.formatValue(payment.value)}</td>
                     <td>{payment.personReceiving.name}</td>
                     <td className="actions-col">
                       <Button variant="light" onClick={() => this.updateEditingPayment(payment)}>

@@ -8,8 +8,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Summary } from '../models/summary.model';
 import { Actions, ApplicationState } from '../store';
 import '../assets/style/summary.css';
-import ValueComponent from './value.component';
-import { arraysEqual } from '../helpers/helpers';
+import Helpers from '../helpers/helpers';
 
 interface Props {
   summaries: Summary[]
@@ -37,7 +36,7 @@ class SummaryComponent extends Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     const { summaries } = this.props;
     const { summary } = this.state;
-    if (!arraysEqual(summaries, prevProps.summaries)
+    if (!Helpers.arraysEqual(summaries, prevProps.summaries)
       && summaries.length > 1
     ) {
       this.updateSummary(summaries.slice(1).find((s) => s.id === summary.id) || summaries[1]);
@@ -52,7 +51,7 @@ class SummaryComponent extends Component<Props, State> {
     const { summaries } = this.props;
     const date = new Date(event.target.value);
     const summary = summaries.slice(1)
-      .find((s) => s.date.getDate() === date.getDate()) || summaries[0];
+      .find((s) => s.date.getTime() === date.getTime()) || summaries[0];
     this.updateSummary(summary);
   }
 
@@ -71,10 +70,10 @@ class SummaryComponent extends Component<Props, State> {
               <Col md={5}>{summaries[0].peopleCount}</Col>
 
               <Col md={7}><b>Total de gastos</b></Col>
-              <Col md={5}><ValueComponent>{summaries[0].expensesTotal}</ValueComponent></Col>
+              <Col md={5}>{Helpers.formatValue(summaries[0].expensesTotal)}</Col>
 
               <Col md={7}><b>Média de gastos por pessoa</b></Col>
-              <Col md={5}><ValueComponent>{summaries[0].expensesPerPerson}</ValueComponent></Col>
+              <Col md={5}>{Helpers.formatValue(summaries[0].expensesPerPerson)}</Col>
             </Row>
           </Card.Body>
         </Card>
@@ -87,7 +86,7 @@ class SummaryComponent extends Component<Props, State> {
                 <Form.Select onChange={this.updateDate}>
                   {summaries.slice(1).map((s) => (
                     <option key={s.date.toString()} value={s.date.toString()}>
-                      {`${s.date.getUTCDate()}/${s.date.getUTCMonth()}/${s.date.getUTCFullYear()}`}
+                      {Helpers.formatDate(s.date)}
                     </option>
                   ))}
                 </Form.Select>
@@ -98,10 +97,10 @@ class SummaryComponent extends Component<Props, State> {
                   <Col md={5}>{summary.peopleCount}</Col>
 
                   <Col md={7}><b>Gastos do dia</b></Col>
-                  <Col md={5}><ValueComponent>{summary.expensesTotal}</ValueComponent></Col>
+                  <Col md={5}>{Helpers.formatValue(summary.expensesTotal)}</Col>
 
                   <Col md={7}><b>Gastos por pessoa do dia</b></Col>
-                  <Col md={5}><ValueComponent>{summary.expensesPerPerson}</ValueComponent></Col>
+                  <Col md={5}>{Helpers.formatValue(summary.expensesPerPerson)}</Col>
                 </Row>
                 {summary.peopleReceiving.length > 0
                   && (
